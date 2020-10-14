@@ -1,19 +1,21 @@
 from django.db import models
+from .utils import generate_url_key
+
 
 class Owner(models.Model):
     phone = models.CharField(max_length=20, primary_key=True)
-    url_key = models.CharField(max_length=255, unique=True, blank=False, null=False)
+    url_key = models.CharField(max_length=255, unique=True, default=generate_url_key(), null=False)
     username = models.CharField(max_length=80)
     email = models.EmailField(unique=True)
 
 
 class Bike(models.Model):
-    owner = models.ForeignKey('Owner', on_delete=models.CASCADE, verbose_name="bikes")
+    owner = models.ForeignKey('Owner', on_delete=models.CASCADE, related_name="bikes")
     name = models.CharField(max_length=100, null=False, blank=False)
     robbed = models.BooleanField(default=False, null=False)
     reference = models.CharField(max_length=255, unique=True)
     bike_model = models.CharField(max_length=255)
-    robbed_location = models.JSONField()
+    robbed_location = models.JSONField(null=True)
 
 
 class Details(models.Model):
