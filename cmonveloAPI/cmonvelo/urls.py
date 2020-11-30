@@ -16,11 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from bikeowner.views import OwnerList, BikeOwnerList
+from bikeowner.views import UserListView, BikeOwnerList
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api-auth/', include('rest_framework.urls')),
-    path('owners/', OwnerList.as_view(), name='owner_list'),
-    path('bikes/', BikeOwnerList.as_view(), name='owner_list'),
+    path('owner/', UserListView.as_view(), name='owner'),
+    path('bikeOwner/', BikeOwnerList.as_view(), name='bike_owner'),
+    path('', include('drfpasswordless.urls'))
 ]

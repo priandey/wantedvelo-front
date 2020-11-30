@@ -8,6 +8,9 @@ verify_ssl = true
 [packages]
 django = "==3.1.2"
 djangorestframework = "==3.12.1"
+drfpasswordless = "*"
+psycopg2 = "*"
+django-cors-headers = "*"
 
 [requires]
 python_version = "3.7"
