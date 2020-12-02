@@ -1,0 +1,31 @@
+# TODO : Ajout imagefield au vélo
+    X Implémenter le modèle
+    X Installer Pillow
+    X Prise en charge du fichier en front-end
+
+# TODO :  Reprendre les modèles Bike et Details
+    - transformer l'attribut modèle en 1 models : brand, relié au modèle Details
+    - retirer l'attribut modèle de Bike
+
+
+#TODO : Samaritain
+    Filtre de base par localité trié par date de vol déclaré autour de l'utilisateur.
+    - Soit entrée coordonnées / Entrée adresse si refus de coord
+
+# TODO :  Signaler vélo retrouvé (affichage sur l'interface user ET envoi mail)
+    - Possibilité d'adjoindre commentaire (sugg. mail ou tel) + coordonnées de l'utilisateur
+    - Si vélo est signalé : Envoyer un seul mail, toggle signalé, et le reste se fait depuis l'interface user
+
+# TODO : Set up email backend
+    - Créer un compte mailgun capé pour wanted velo
+    - Relier le service
+
+# TODO : Mise en ligne du service
+    - Prendre contact et récupérer le nom de domaine
+    - Set-up nginx pour les deux front-ends (HTTPS required !)
+    - Déployer l'API (wip)
+
+                ## Suggestion prochain sprint ##
+
+# TODO LATER :  Système d'alerte géolocalisé associé à un bot twitter
+# TODO LATER : Faire un système de suggestion de modèle en regardant ceux existant en db

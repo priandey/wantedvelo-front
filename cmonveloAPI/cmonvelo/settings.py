@@ -32,7 +32,7 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'bikeowner.Owner'
 
-EMAIL_BACKEND= "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'bikeowner',
+    'samaritan',
     'rest_framework.authtoken',
     'drfpasswordless'
 ]

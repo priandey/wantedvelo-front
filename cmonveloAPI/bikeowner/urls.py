@@ -13,10 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
+
+from .views import UserPannelView, BikeListView, BikeUpdateView
 
 urlpatterns = [
-    path('owner/', include('bikeowner.urls')),
-    path('', include('drfpasswordless.urls'))
+    path('user_pannel/', UserPannelView.as_view(), name='user_pannel'),
+    path('bike_list/', BikeListView.as_view(), name='bike_list'),
+    path('bike_update/', BikeUpdateView.as_view(), name='bike_update'),
 ]

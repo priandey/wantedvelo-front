@@ -22,7 +22,7 @@ var authentication = new Vue({
         // API Endpoints below
         send_mail_ep: "auth/email/",
         send_token_ep: "auth/token/",
-        get_user_ep: "owner/",
+        get_user_ep: "owner/user_pannel/",
 
     },
     mounted: function () {
@@ -135,7 +135,8 @@ var bikeList = new Vue({
             bike_model:'',
         },
         endpoints: {
-            bikeListCreate: "bikeOwner/"
+            bikeListEp: "owner/bike_list/",
+            declareRobbery: "owner/bike_update/"
         },
         appending: false,
     },
@@ -145,7 +146,7 @@ var bikeList = new Vue({
         },
         refresh_bike_list: function() {
             this.bikeList = [];
-          axios.get(API_ROOT + this.endpoints.bikeListCreate, {
+          axios.get(API_ROOT + this.endpoints.bikeListEp, {
               headers: {
                   Authorization: "Token "+ authentication.credentials.authToken
               }
@@ -156,7 +157,8 @@ var bikeList = new Vue({
                           name: item.name,
                           reference: item.reference,
                           bike_model: item.bike_model,
-                          robbed: item.robbed
+                          robbed: item.robbed,
+                          pk: item.pk,
                       })
                   });
               })
@@ -165,14 +167,39 @@ var bikeList = new Vue({
               })
         },
         register_bike: function(){
-            axios.post(API_ROOT + this.endpoints.bikeListCreate, this.new_bike, {
+            axios.post(API_ROOT + this.endpoints.bikeListEp, this.new_bike, {
                 headers: {
                     Authorization: "Token " + authentication.credentials.authToken
                 }
             })
                 .then(response => {
                     bikeList.refresh_bike_list();
+                    bikeList.new_bike = {
+                        name:'',
+                        robbed:false,
+                        reference:'',
+                        bike_model:'',
+                    };
+                    bikeList.appending = false;
+
                 })
+        },
+        change_status: function(id){
+            let bike = bikeList.bikeList[id];
+            let confirmed = window.confirm("Voulez-vous déclarer '" + bike.name + "' volé ?");
+            if (confirmed) {
+                axios.patch(API_ROOT + this.endpoints.declareRobbery, {pk: bike.pk}, {
+                    headers: {
+                        Authorization: "Token " + authentication.credentials.authToken
+                    }
+                })
+                    .then(response => {
+                        console.log(response);
+                        bikeList.refresh_bike_list();
+                    })
+            } else {
+                console.log("Abort");
+            }
         }
     }
 

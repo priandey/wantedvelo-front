@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from .utils import generate_url_key
 
 
 class Owner(AbstractUser):
@@ -17,7 +16,10 @@ class Bike(models.Model):
     reference = models.CharField(max_length=255, unique=True)
     bike_model = models.CharField(max_length=255)
     robbed_location = models.JSONField(null=True)
+    date_of_robbery = models.DateTimeField(null=True)
 
+    def __str__(self):
+        return self.name
 
 class Details(models.Model):
     bike = models.OneToOneField('Bike', on_delete=models.CASCADE, primary_key=True, verbose_name="details")
