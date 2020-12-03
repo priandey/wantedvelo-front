@@ -1,12 +1,37 @@
+/* Palette                */
+/*                        */
 body {
-  background-color: #173f5f; }
+  background-color: #404040; }
 
 .container {
-  background-color: #3caea3; }
-
-.entry {
-  border: 4px solid #173f5f; }
+  background-color: #87A0B2; }
 
 .addVelo {
-  background-color: #173f5f;
-  color: #f6d55c; }
+  background-color: #404040;
+  color: #F2B705; }
+
+.button {
+  cursor: pointer; }
+
+/* Having some fun with buttons */
+.robb_button_peace {
+  border-radius: 35% 65% 28% 72% / 68% 60% 40% 32%;
+  background-color: #A2D082;
+  transition: background-color 0.8s, border-radius 0.8s;
+  height: 2rem;
+  width: 100%; }
+
+.robb_button_peace:hover {
+  border-radius: 64% 36% 55% 45% / 68% 60% 40% 32%;
+  background-color: #C82425; }
+
+.robb_button_robbed {
+  border-radius: 64% 36% 55% 45% / 68% 60% 40% 32%;
+  background-color: #C82425;
+  transition: background-color 0.8s, border-radius 0.8s;
+  height: 2rem;
+  width: 100%; }
+
+.robb_button_robbed:hover {
+  border-radius: 35% 65% 28% 72% / 68% 60% 40% 32%;
+  background-color: #A2D082; }

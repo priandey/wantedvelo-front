@@ -4,9 +4,12 @@
     X Prise en charge du fichier en front-end
 
 # TODO :  Reprendre les modèles Bike et Details
-    - transformer l'attribut modèle en 1 models : brand, relié au modèle Details
-    - retirer l'attribut modèle de Bike
+    x transformer l'attribut modèle en 1 models : brand, relié au modèle Details
+    X retirer l'attribut modèle de Bike
+    X Faire une méthode pour mettre à jour la date
 
+# TODO : Rework BikeUpdateView and change_status entrypoint
+    - Changement de fonctionnement
 
 #TODO : Samaritain
     Filtre de base par localité trié par date de vol déclaré autour de l'utilisateur.

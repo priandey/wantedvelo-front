@@ -11,42 +11,55 @@
 </head>
 <body>
 <div class="container">
-    <div class="header row align-content-between" id="authentication">
-        <h1 class="col-4">Wanted Velo</h1>
-        <h1 class="col-4">
+    <div class="header row justify-content-between" id="authentication">
+        <div class="col-3"><h1>Wanted Velo</h1></div>
+        <div class="col-5">
             <input type="text" class="email" placeholder="EMAIL" v-if="isAuthenticated === false" v-model="user.email" v-on:keyup.enter="send_mail"/>
-            <span v-else>{{ user.email }}</span>
+            <h2 v-else>{{ user.email }}</h2>
             <input type="text" class="loginToken" placeholder="TOKEN" v-if='mail_sent === true' v-model="credentials.loginToken" v-on:keyup.enter="get_token"/>
-            <!-- Error placeholder div -->
-        </h1>
-        <i v-if="isAuthenticated === true" v-on:click="log_out" class="fas fa-times-circle fa-2x col-1 text-right"></i>
-        <i v-if="isAuthenticated === true" v-on:click="switch_edition" class="far fa-edit fa-2x col-1 text-left"></i>
+            <!-- TODO : Error placeholder div -->
+        </div>
+        <div class="col-2 text-right">
+            <i v-if="isAuthenticated === true" v-on:click="log_out" class="button fas fa-times-circle fa-2x"></i>
+            <i v-if="isAuthenticated === true" v-on:click="switch_edition" class="button far fa-edit fa-2x"></i>
+        </div>
+        <div class="col-12">
         <input type="text" placeholder="Email" v-if="open_edition" v-model="user.email" v-on:keyup.enter="edit_informations" />
         <input type="text" placeholder="Phone" v-if="open_edition" v-model="user.phone" v-on:keyup.enter="edit_informations" />
         <input type="text" placeholder="Username" v-if="open_edition" v-model="user.username" v-on:keyup.enter="edit_informations" />
+        </div>
     </div>
-    <div class="entry row align-content-center" id="bikeList">
+    <div class="entry row align-content-between" id="bikeList">
         <table class="col-lg-12 text-center">
             <thead>
                 <tr>
                     <th><h2>Nom</h2></th>
-                    <th><h2>Identifiant</h2></th>
-                    <th><h2>Modèle</h2></th>
-                    <th><h2>Volé</h2></th>
+                    <th><h2>Identifiant unique</h2></th>
+                    <th><h2>Image</h2></th>
+                    <th><h2>Etat</h2></th>
                 </tr>
             </thead>
             <tbody>
+                <!-- Iterations of bikes -->
                 <tr v-for="bike, key in bikeList">
                     <th>{{ bike.name }}</th>
                     <th>{{ bike.reference }}</th>
-                    <th>{{ bike.bike_model }}</th>
-                    <th>{{ bike.robbed }}</th>
-                    <th><button @click="change_status(key)">Changer</button></th>
+                    <th>
+                        <a v-if="bike.picture !== null" v-bind:href="bike.picture" target="_blank">Image</a>
+                        <span v-else>Aucune</span>
+                    </th>
+                    <th @click="change_robbed(key)">
+                        <div v-if="bike.robbed===false" class="button robb_button_peace" title="Ce vélo n'est pas volé, le déclarer ?"></div>
+                        <div v-else class="button robb_button_robbed" title="Ce vélo est déclaré volé"></div>
+                    </th>
+                    <th><button >Changer</button></th>
                 </tr>
+
+                <!-- New bike interface -->
                 <tr v-if="appending">
                     <th><input type="text" placeholder="Nom" v-model="new_bike.name" /></th>
                     <th><input type="text" placeholder="Identifiant" v-model="new_bike.reference" /></th>
-                    <th><input type="text" placeholder="Modèle" v-model="new_bike.bike_model" /></th>
+                    <th><input type="file" id="picture" ref="picture" v-on:change="handleFileUpload()" /></th>
                     <th>
                         Oui
                         <input type="radio" v-model="new_bike.robbed" v-bind:value="true" />
@@ -59,9 +72,9 @@
                 </tr>
             </tbody>
         </table>
-        <i class="col-6 fas fa-plus-square fa-3x text-right" v-if="appending===false" v-on:click="switch_appending"></i>
-        <i class="col-6 fas fa-minus-square fa-3x text-right" v-else v-on:click="switch_appending"></i>
-        <i class="col-6 fas fa-sync fa-3x text-left" v-on:click="refresh_bike_list"></i>
+        <i class="col-6 fas fa-plus-square fa-2x text-right" v-if="appending===false" v-on:click="switch_appending"></i>
+        <i class="col-6 fas fa-minus-square fa-2x text-right" v-else v-on:click="switch_appending"></i>
+        <i class="col-6 fas fa-sync fa-2x text-left" v-on:click="refresh_bike_list"></i>
     </div>
 </div>
 

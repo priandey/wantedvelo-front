@@ -20,5 +20,5 @@ from .views import UserPannelView, BikeListView, BikeUpdateView
 urlpatterns = [
     path('user_pannel/', UserPannelView.as_view(), name='user_pannel'),
     path('bike_list/', BikeListView.as_view(), name='bike_list'),
-    path('bike_update/', BikeUpdateView.as_view(), name='bike_update'),
+    path('bike_update/<int:pk>/', BikeUpdateView.as_view(), name='bike_update'),
 ]

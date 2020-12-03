@@ -1,4 +1,5 @@
 *.pyc
 .idea/
 cmonveloAPI/*.sqlite3
+cmonveloAPI/media/
 */assets/node_modules/

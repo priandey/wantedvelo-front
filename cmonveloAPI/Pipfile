@@ -11,6 +11,7 @@ djangorestframework = "==3.12.1"
 drfpasswordless = "*"
 psycopg2 = "*"
 django-cors-headers = "*"
+pillow = "==8.0.1"
 
 [requires]
 python_version = "3.7"

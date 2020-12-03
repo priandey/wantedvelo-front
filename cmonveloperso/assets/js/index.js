@@ -112,7 +112,7 @@ var authentication = new Vue({
             this.open_edition = !this.open_edition;
         },
         edit_informations: function() {
-            axios.put(API_ROOT + this.get_user_ep, this.user, {
+            axios.patch(API_ROOT + this.get_user_ep, this.user, {
                 headers: {
                     Authorization: 'Token ' + this.credentials.authToken
                 }
@@ -132,15 +132,19 @@ var bikeList = new Vue({
             name:'',
             robbed:false,
             reference:'',
-            bike_model:'',
+            picture:'',
         },
         endpoints: {
             bikeListEp: "owner/bike_list/",
-            declareRobbery: "owner/bike_update/"
+            patch_bike: "owner/bike_update/"
         },
         appending: false,
     },
+
     methods: {
+        handleFileUpload: function() {
+            bikeList.new_bike.picture = bikeList.$refs.picture.files[0];
+        },
         switch_appending: function() {
             bikeList.appending = !bikeList.appending;
         },
@@ -152,11 +156,12 @@ var bikeList = new Vue({
               }
           })
               .then(response => {
+                  console.log(response);
                   response.data.forEach(function(item) {
                       bikeList.bikeList.push({
                           name: item.name,
                           reference: item.reference,
-                          bike_model: item.bike_model,
+                          picture: item.picture,
                           robbed: item.robbed,
                           pk: item.pk,
                       })
@@ -167,9 +172,16 @@ var bikeList = new Vue({
               })
         },
         register_bike: function(){
-            axios.post(API_ROOT + this.endpoints.bikeListEp, this.new_bike, {
+            let formData = new FormData();
+            formData.append('name', bikeList.new_bike.name);
+            formData.append('robbed', bikeList.new_bike.robbed);
+            formData.append('reference', bikeList.new_bike.reference);
+            formData.append('picture', bikeList.new_bike.picture);
+
+            axios.post(API_ROOT + this.endpoints.bikeListEp, formData, {
                 headers: {
-                    Authorization: "Token " + authentication.credentials.authToken
+                    'Authorization': "Token " + authentication.credentials.authToken,
+                    'Content-Type': 'multipart/form-data'
                 }
             })
                 .then(response => {
@@ -178,17 +190,29 @@ var bikeList = new Vue({
                         name:'',
                         robbed:false,
                         reference:'',
-                        bike_model:'',
+                        picture: '',
                     };
                     bikeList.appending = false;
 
                 })
         },
-        change_status: function(id){
+        change_robbed: function(id){
             let bike = bikeList.bikeList[id];
-            let confirmed = window.confirm("Voulez-vous déclarer '" + bike.name + "' volé ?");
+            let robbed = !bike.robbed;
+            let message = '';
+            if (bike.robbed === false) {
+                message = "Voulez-vous déclarer " + bike.name + " volé ?"
+            } else {
+                message = "Voulez-vous déclarer avoir retrouvé ce vélo : " + bike.name
+            }
+            let confirmed = window.confirm(message);
+            let location = getUserCoordinates();
+            // TODO : Could clarify bike targeted in url.
             if (confirmed) {
-                axios.patch(API_ROOT + this.endpoints.declareRobbery, {pk: bike.pk}, {
+                axios.patch(API_ROOT + this.endpoints.patch_bike + bike.pk + "/", {
+                    robbed: robbed,
+                    robbed_location: location,
+                }, {
                     headers: {
                         Authorization: "Token " + authentication.credentials.authToken
                     }
@@ -204,8 +228,6 @@ var bikeList = new Vue({
     }
 
 });
-// Bloc Liste des vélos de l'utilisateur
-// Bloc Ajout d'un vélo
 
 function storageAvailable(type) {
     try {
@@ -228,5 +250,27 @@ function storageAvailable(type) {
             e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
             // acknowledge QuotaExceededError only if there's something already stored
             storage.length !== 0;
+    }
+};
+
+function getUserCoordinates() {
+    let coords = {
+        lat:'',
+        lon:'',
+    };
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            coords.lat = position.coords.latitude;
+            coords.lon = position.coords.longitude;
+        }, handle_error)
+    } else {
+        handle_error();
+    }
+
+    return coords;
+
+    function handle_error() {
+        coords.lat = 48.852969;
+        coords.lon = 2.349903;
     }
 };

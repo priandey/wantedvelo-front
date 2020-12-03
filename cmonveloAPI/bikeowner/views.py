@@ -42,10 +42,7 @@ class BikeUpdateView(generics.UpdateAPIView):
     serializer_class = BikeOwnerSerializer
 
     def get_object(self):
-        bike = get_object_or_404(Bike, pk=self.request.data['pk'])
+        bike = get_object_or_404(Bike, pk=self.kwargs['pk'])
         self.check_object_permissions(self.request, bike)
+        print(bike.robbed)
         return bike
-
-    def perform_update(self, serializer):
-        robbed = not self.get_object().robbed
-        serializer.save(robbed=robbed)

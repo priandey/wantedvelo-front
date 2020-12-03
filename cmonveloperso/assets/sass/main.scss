@@ -1,7 +1,10 @@
-$background-color : #173f5f;
-$primary-color: #3caea3;
-$secondary-color: #f6d55c;
-
+/* Palette                */
+$background-color : #404040;
+$primary-color: #87A0B2;
+$secondary-color: #F2B705;
+$robb-button-peace : #A2D082;
+$robb-button-robbed : #C82425;
+/*                        */
 body {
   background-color : $background-color;
 }
@@ -10,11 +13,37 @@ body {
   background-color: $primary-color;
 }
 
-.entry {
-  border: 4px solid $background-color;
-}
-
 .addVelo {
   background-color: $background-color;
   color: $secondary-color
+}
+
+.button {
+  cursor: pointer;
+}
+/* Having some fun with buttons */
+.robb_button_peace {
+  border-radius: 35% 65% 28% 72% / 68% 60% 40% 32%;
+  background-color: $robb-button-peace;
+  transition : background-color 0.8s, border-radius 0.8s;
+  height: 2rem;
+  width: 100%;
+}
+
+.robb_button_peace:hover {
+  border-radius: 64% 36% 55% 45% / 68% 60% 40% 32%;
+  background-color: $robb-button-robbed;
+}
+
+.robb_button_robbed {
+  border-radius: 64% 36% 55% 45% / 68% 60% 40% 32%;
+  background-color: $robb-button-robbed;
+  transition : background-color 0.8s, border-radius 0.8s;
+  height: 2rem;
+  width: 100%;
+}
+
+.robb_button_robbed:hover {
+  border-radius: 35% 65% 28% 72% / 68% 60% 40% 32%;
+  background-color: $robb-button-peace;
 }
