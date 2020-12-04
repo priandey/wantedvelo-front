@@ -148,6 +148,10 @@ var bikeList = new Vue({
         switch_appending: function() {
             bikeList.appending = !bikeList.appending;
         },
+        toggle_editing: function(key) {
+            bikeList.bikeList[key].editing = !bikeList.bikeList[key].editing
+        }
+        ,
         refresh_bike_list: function() {
             this.bikeList = [];
           axios.get(API_ROOT + this.endpoints.bikeListEp, {
@@ -156,7 +160,6 @@ var bikeList = new Vue({
               }
           })
               .then(response => {
-                  console.log(response);
                   response.data.forEach(function(item) {
                       bikeList.bikeList.push({
                           name: item.name,
@@ -164,6 +167,7 @@ var bikeList = new Vue({
                           picture: item.picture,
                           robbed: item.robbed,
                           pk: item.pk,
+                          editing: false,
                       })
                   });
               })
@@ -218,7 +222,6 @@ var bikeList = new Vue({
                             }
                         })
                             .then(response => {
-                                console.log(response);
                                 bikeList.refresh_bike_list();
                             })
                     } else {
@@ -228,6 +231,24 @@ var bikeList = new Vue({
                 .catch(e => {
                     console.log(e);
                 });
+        },
+        edit_bike: function(id){
+            let bike = bikeList.bikeList[id];
+            axios.patch(API_ROOT + this.endpoints.patch_bike + bike.pk + "/", {
+                name: bike.name,
+                reference: bike.reference,
+            }, {
+                headers: {
+                    Authorization: "Token " + authentication.credentials.authToken
+                }
+            })
+                .then(response => {
+                    bikeList.toggle_editing(id);
+                    bikeList.refresh_bike_list();
+                })
+                .catch(error => {
+                    console.log(error);
+                })
         }
     }
 

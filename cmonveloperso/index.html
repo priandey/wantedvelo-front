@@ -19,11 +19,11 @@
             <input type="text" class="loginToken" placeholder="TOKEN" v-if='mail_sent === true' v-model="credentials.loginToken" v-on:keyup.enter="get_token"/>
             <!-- TODO : Error placeholder div -->
         </div>
-        <div class="col-2 text-right">
-            <i v-if="isAuthenticated === true" v-on:click="log_out" class="button fas fa-times-circle fa-2x"></i>
-            <i v-if="isAuthenticated === true" v-on:click="switch_edition" class="button far fa-edit fa-2x"></i>
+        <div class="col-2text-right">
+            <i v-if="isAuthenticated === true" v-on:click="log_out" class="button fas fa-times-circle fa-2x" title="Se déconnecter"></i>
+            <i v-if="isAuthenticated === true" v-on:click="switch_edition" class="button far fa-edit fa-2x" title="Modifier mes informations"></i>
         </div>
-        <div class="col-12">
+        <div class="col-12 col-">
         <input type="text" placeholder="Email" v-if="open_edition" v-model="user.email" v-on:keyup.enter="edit_informations" />
         <input type="text" placeholder="Phone" v-if="open_edition" v-model="user.phone" v-on:keyup.enter="edit_informations" />
         <input type="text" placeholder="Username" v-if="open_edition" v-model="user.username" v-on:keyup.enter="edit_informations" />
@@ -42,17 +42,22 @@
             <tbody>
                 <!-- Iterations of bikes -->
                 <tr v-for="bike, key in bikeList">
-                    <th>{{ bike.name }}</th>
-                    <th>{{ bike.reference }}</th>
+                    <th v-if="bike.editing"><input type="text" placeholder="Nom" v-model="bike.name" v-on:keyup.enter="edit_bike(key)"/></th>
+                    <th v-else>{{ bike.name }}</th>
+                    <th v-if="bike.editing"><input type="text" placeholder="Identifiant" v-model="bike.reference" v-on:keyup.enter="edit_bike(key)"/></th>
+                    <th v-else>{{ bike.reference }}</th>
                     <th>
                         <a v-if="bike.picture !== null" v-bind:href="bike.picture" target="_blank">Image</a>
                         <span v-else>Aucune</span>
                     </th>
                     <th @click="change_robbed(key)">
-                        <div v-if="bike.robbed===false" class="button robb_button_peace" title="Ce vélo n'est pas volé, le déclarer ?"></div>
-                        <div v-else class="button robb_button_robbed" title="Ce vélo est déclaré volé"></div>
+                        <div v-if="bike.robbed===false" class="button robb_button_peace" title="Ce vélo n'est pas volé. Déclarer un vol ?"></div>
+                        <div v-else class="button robb_button_robbed" title="Ce vélo est déclaré volé. Le déclarer trouvé ?"></div>
                     </th>
-                    <th><button >Changer</button></th>
+                    <th>
+                        <button v-if="!bike.editing" @click="toggle_editing(key)">Editer</button>
+                        <button v-else @click="edit_bike(key)">Enregistrer</button>
+                    </th>
                 </tr>
 
                 <!-- New bike interface -->

@@ -9,7 +9,8 @@
     X Faire une méthode pour mettre à jour la date
 
 # TODO : Rework BikeUpdateView and change_status entrypoint
-    - Changement de fonctionnement
+    X Changement de fonctionnement
+    - Edition de la photographie
 
 #TODO : Samaritain
     Filtre de base par localité trié par date de vol déclaré autour de l'utilisateur.

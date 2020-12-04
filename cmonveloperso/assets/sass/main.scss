@@ -18,9 +18,16 @@ body {
   color: $secondary-color
 }
 
+input[type=text] {
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid $background-color;
+}
+
 .button {
   cursor: pointer;
 }
+
 /* Having some fun with buttons */
 .robb_button_peace {
   border-radius: 35% 65% 28% 72% / 68% 60% 40% 32%;
