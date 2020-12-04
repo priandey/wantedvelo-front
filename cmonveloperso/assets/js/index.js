@@ -206,24 +206,28 @@ var bikeList = new Vue({
                 message = "Voulez-vous déclarer avoir retrouvé ce vélo : " + bike.name
             }
             let confirmed = window.confirm(message);
-            let location = getUserCoordinates();
-            // TODO : Could clarify bike targeted in url.
-            if (confirmed) {
-                axios.patch(API_ROOT + this.endpoints.patch_bike + bike.pk + "/", {
-                    robbed: robbed,
-                    robbed_location: location,
-                }, {
-                    headers: {
-                        Authorization: "Token " + authentication.credentials.authToken
-                    }
+            getUserCoordinates()
+                .then(location => {
+                    if (confirmed) {
+                        axios.patch(API_ROOT + this.endpoints.patch_bike + bike.pk + "/", {
+                            robbed: robbed,
+                            robbed_location: location,
+                        }, {
+                            headers: {
+                                Authorization: "Token " + authentication.credentials.authToken
+                            }
+                        })
+                            .then(response => {
+                                console.log(response);
+                                bikeList.refresh_bike_list();
+                            })
+                    } else {
+                        console.log("Abort");
+        }
                 })
-                    .then(response => {
-                        console.log(response);
-                        bikeList.refresh_bike_list();
-                    })
-            } else {
-                console.log("Abort");
-            }
+                .catch(e => {
+                    console.log(e);
+                });
         }
     }
 
@@ -254,23 +258,22 @@ function storageAvailable(type) {
 };
 
 function getUserCoordinates() {
-    let coords = {
-        lat:'',
-        lon:'',
-    };
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function (position) {
-            coords.lat = position.coords.latitude;
-            coords.lon = position.coords.longitude;
-        }, handle_error)
-    } else {
-        handle_error();
-    }
-
-    return coords;
-
-    function handle_error() {
-        coords.lat = 48.852969;
-        coords.lon = 2.349903;
-    }
+    return new Promise((resolve, reject) => {
+        let coords = {
+            lat:'',
+            lon:'',
+        };
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                coords.lat = position.coords.latitude;
+                coords.lon = position.coords.longitude;
+                resolve(coords);
+            }, () => resolve({
+                lat:48.852969,
+                lon:2.349903,
+            }))
+        } else {
+            reject(new Error("Failed to geolocate"));
+        }
+    });
 };

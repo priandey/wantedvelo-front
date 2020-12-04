@@ -3,7 +3,6 @@ from .serializers import OwnerSerializer, BikeOwnerSerializer
 from .permissions import IsUser, isOwner
 
 from django.shortcuts import get_object_or_404
-from rest_framework.exceptions import PermissionDenied
 from rest_framework import generics
 from rest_framework import authentication, permissions
 
@@ -44,5 +43,4 @@ class BikeUpdateView(generics.UpdateAPIView):
     def get_object(self):
         bike = get_object_or_404(Bike, pk=self.kwargs['pk'])
         self.check_object_permissions(self.request, bike)
-        print(bike.robbed)
         return bike
