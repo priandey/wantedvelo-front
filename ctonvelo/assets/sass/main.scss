@@ -1,7 +1,38 @@
+$background-color : #404040;
+$primary-color: #87A0B2;
+$secondary-color: #F2B705;
+$button-peace : #A2D082;
+$button-robbed : #C82425;
+
+body {
+  background-color: $background-color;
+}
+
+.header {
+  background-color: $secondary-color;
+}
+
+.content {
+  background-color: $primary-color;
+}
+
 .bike {
   margin: 1rem 1rem;
 }
 
+.button-peace {
+  background-color: $button-peace;
+  border: none;
+}
+
+.button-robbed {
+  background-color: $button-robbed;
+  border: none;
+}
+
 .card-img-top {
   margin-top: 1rem;
+  max-height: 150px;
+  width: auto;
+
 }

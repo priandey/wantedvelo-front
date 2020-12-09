@@ -12,64 +12,24 @@
 <body>
 <div class="container">
     <div class="header row justify-content-between align-items-center" id="localisation">
-        <div class="col-12 col-lg-3"><h1>WVS</h1></div>
-        <input type="text" placeholder="Localité" class="col-12 col-lg-4" v-model="finder.kw"/>
-        <div class="col-12 col-lg-3"><h3>Localisé à : {{ locality }}</h3></div>
+        <div class="col-12 col-lg-2"><h1>WVS</h1></div>
+        <input type="text" placeholder="Entrez une localité" class="col-12 col-lg-5" v-model="finder.kw" v-on:keyup.enter="locate_user()" />
+        <div class="col-12 col-lg-3">Localisé à : {{ locality }}</div>
     </div>
-    <div class="content row">
-        <div class="col-12 col-lg-3 card bike">
-            <img class="card-img-top" src="https://cdn-cyclingtips.pressidium.com/wp-content/uploads/2020/07/Kate-Leemings-Christini-AWD-fatbike-2.jpg" alt="Card image cap">
+    <div class="content row justify-content-around" id="bike-board">
+        <div v-for="bike,id in bikes" class="col-12 col-lg-3 card bike">
+            <img class="card-img-top" v-bind:src="bike.picture" alt="Card image cap">
             <div class="card-body">
-                <h4 class="card-title">Card title</h4>
+                <h4 class="card-title">{{ bike.reference }}</h4>
                 <p class="card-text">
-                    Some quick example text to build on the card title
-                    and make up the bulk of the card's content.
+                    {{ bike.distance }} km
                 </p>
-                <a href="#!" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-        <div class="col-12 col-lg-3 card bike">
-            <img class="card-img-top" src="https://cdn-cyclingtips.pressidium.com/wp-content/uploads/2020/07/Kate-Leemings-Christini-AWD-fatbike-2.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">
-                    Some quick example text to build on the card title
-                    and make up the bulk of the card's content.
-                </p>
-                <a href="#!" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-        <div class="col-12 col-lg-3 card bike">
-            <img class="card-img-top" src="https://cdn-cyclingtips.pressidium.com/wp-content/uploads/2020/07/Kate-Leemings-Christini-AWD-fatbike-2.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">
-                    Some quick example text to build on the card title
-                    and make up the bulk of the card's content.
-                </p>
-                <a href="#!" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-        <div class="col-12 col-lg-3 card bike">
-            <img class="card-img-top" src="https://cdn-cyclingtips.pressidium.com/wp-content/uploads/2020/07/Kate-Leemings-Christini-AWD-fatbike-2.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">
-                    Some quick example text to build on the card title
-                    and make up the bulk of the card's content.
-                </p>
-                <a href="#!" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-        <div class="col-12 col-lg-3 card bike">
-            <img class="card-img-top" src="https://cdn-cyclingtips.pressidium.com/wp-content/uploads/2020/07/Kate-Leemings-Christini-AWD-fatbike-2.jpg" alt="Card image cap">
-            <div class="card-body">
-                <h4 class="card-title">Card title</h4>
-                <p class="card-text">
-                    Some quick example text to build on the card title
-                    and make up the bulk of the card's content.
-                </p>
-                <a href="#!" class="btn btn-primary">Go somewhere</a>
+                <div v-if="bike.seen.toggle">
+                    <textarea title="Ecrivez un message au propriétaire" placeholder="Ecrivez un message au propriétaire. Pensez à y intégrer vos coordonnées si vous le souhaitez" rows="5" v-model="bike.seen.message"></textarea>
+                    <button class="btn btn-primary button-peace" @click="report_found(id)">Envoyer</button>
+                    <button class="btn btn-secondary" @click="toggle_seen(id)">Masquer</button>
+                </div>
+                <button v-else @click="toggle_seen(id)" class="btn btn-primary button-robbed">Je l'ai vu !</button>
             </div>
         </div>
     </div>

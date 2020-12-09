@@ -12,6 +12,8 @@ drfpasswordless = "*"
 psycopg2 = "*"
 django-cors-headers = "*"
 pillow = "==8.0.1"
+geopy = "==2.0.0"
+faker = "*"
 
 [requires]
 python_version = "3.7"

@@ -1,7 +1,8 @@
 from django.urls import path
 
-from .views import StolenBikes
+from .views import StolenBikes, CreateFoundAlert
 
 urlpatterns = [
-    path('stolen-bikes/', StolenBikes.as_view())
+    path('stolen-bikes/', StolenBikes.as_view()),
+    path('found/', CreateFoundAlert.as_view()),
 ]

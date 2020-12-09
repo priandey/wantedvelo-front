@@ -3,8 +3,18 @@
 body {
   background-color: #404040; }
 
+.header {
+  background-color: #F2B705; }
+
+.miniature {
+  max-height: 80px; }
+
+.alerts {
+  background-color: rgba(200, 1, 0, 0.4); }
+
 .container {
-  background-color: #87A0B2; }
+  background-color: #87A0B2;
+  padding: 1rem 1rem; }
 
 .addVelo {
   background-color: #404040;

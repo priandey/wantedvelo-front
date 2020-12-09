@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Owner, Bike, Details
+from samaritan.serializers import FoundAlertSerializer
 
 
 class OwnerSerializer(serializers.ModelSerializer):
@@ -12,7 +13,8 @@ class OwnerSerializer(serializers.ModelSerializer):
 
 class BikeOwnerSerializer(serializers.ModelSerializer):
     owner = OwnerSerializer(many=False, read_only=True)
+    alerts = FoundAlertSerializer(many=True, read_only=True)
 
     class Meta:
         model = Bike
-        fields = ['name', 'picture', 'reference', 'robbed', 'robbed_location', 'pk', 'owner']
+        fields = ['name', 'picture', 'reference', 'robbed', 'robbed_location', 'pk', 'owner', 'alerts']

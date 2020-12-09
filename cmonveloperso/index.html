@@ -11,17 +11,17 @@
 </head>
 <body>
 <div class="container">
-    <div class="header row justify-content-between" id="authentication">
-        <div class="col-3"><h1>Wanted Velo</h1></div>
+    <div class="header row justify-content-between align-items-center" id="authentication">
+        <div class="col-3"><h1>Wanted Vélo</h1></div>
         <div class="col-5">
             <input type="text" class="email" placeholder="EMAIL" v-if="isAuthenticated === false" v-model="user.email" v-on:keyup.enter="send_mail"/>
-            <h2 v-else>{{ user.email }}</h2>
+            <h3 v-else>{{ user.email }}</h3>
             <input type="text" class="loginToken" placeholder="TOKEN" v-if='mail_sent === true' v-model="credentials.loginToken" v-on:keyup.enter="get_token"/>
             <!-- TODO : Error placeholder div -->
-        </div>
-        <div class="col-2text-right">
+    </div>
+        <div class="col-2 text-right">
+            <i v-if="isAuthenticated === true" v-on:click="switch_edition" class="button fas fa-user-edit fa-2x" title="Modifier mes informations"></i>
             <i v-if="isAuthenticated === true" v-on:click="log_out" class="button fas fa-times-circle fa-2x" title="Se déconnecter"></i>
-            <i v-if="isAuthenticated === true" v-on:click="switch_edition" class="button far fa-edit fa-2x" title="Modifier mes informations"></i>
         </div>
         <div class="col-12 col-">
         <input type="text" placeholder="Email" v-if="open_edition" v-model="user.email" v-on:keyup.enter="edit_informations" />
@@ -30,56 +30,72 @@
         </div>
     </div>
     <div class="entry row align-content-between" id="bikeList">
-        <table class="col-lg-12 text-center">
-            <thead>
-                <tr>
-                    <th><h2>Nom</h2></th>
-                    <th><h2>Identifiant unique</h2></th>
-                    <th><h2>Image</h2></th>
-                    <th><h2>Etat</h2></th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Iterations of bikes -->
-                <tr v-for="bike, key in bikeList">
-                    <th v-if="bike.editing"><input type="text" placeholder="Nom" v-model="bike.name" v-on:keyup.enter="edit_bike(key)"/></th>
-                    <th v-else>{{ bike.name }}</th>
-                    <th v-if="bike.editing"><input type="text" placeholder="Identifiant" v-model="bike.reference" v-on:keyup.enter="edit_bike(key)"/></th>
-                    <th v-else>{{ bike.reference }}</th>
-                    <th>
-                        <a v-if="bike.picture !== null" v-bind:href="bike.picture" target="_blank">Image</a>
-                        <span v-else>Aucune</span>
-                    </th>
-                    <th @click="change_robbed(key)">
-                        <div v-if="bike.robbed===false" class="button robb_button_peace" title="Ce vélo n'est pas volé. Déclarer un vol ?"></div>
-                        <div v-else class="button robb_button_robbed" title="Ce vélo est déclaré volé. Le déclarer trouvé ?"></div>
-                    </th>
-                    <th>
-                        <button v-if="!bike.editing" @click="toggle_editing(key)">Editer</button>
-                        <button v-else @click="edit_bike(key)">Enregistrer</button>
-                    </th>
-                </tr>
+        <template v-if="toggle_list">
+            <table class="col-lg-12 text-center">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th><h2>Vélo</h2></th>
+                        <th><h2>N° Cadre / Bicycode</h2></th>
+                        <th><h2>Photo</h2></th>
+                        <th><h2>Etat</h2></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Iterations of bikes -->
+                    <template v-for="bike, key in bikeList">
+                        <tr>
+                            <th><i v-if="bike.alerts.length > 0" class="fa fa-arrow-down button" @click="toggle_detail(key)" title="Voir les alertes" /></th>
+                            <th v-if="bike.editing"><input type="text" placeholder="Nom de votre vélo" v-model="bike.name" v-on:keyup.enter="edit_bike(key)"/></th>
+                            <th @click="toggle_editing(key)" v-else>{{ bike.name }}</th>
 
-                <!-- New bike interface -->
-                <tr v-if="appending">
-                    <th><input type="text" placeholder="Nom" v-model="new_bike.name" /></th>
-                    <th><input type="text" placeholder="Identifiant" v-model="new_bike.reference" /></th>
-                    <th><input type="file" id="picture" ref="picture" v-on:change="handleFileUpload()" /></th>
-                    <th>
-                        Oui
-                        <input type="radio" v-model="new_bike.robbed" v-bind:value="true" />
-                        <input type="radio" v-model="new_bike.robbed" v-bind:value="false" />
-                        Non
-                    </th>
-                    <th>
-                        <button v-on:click="register_bike">Enregistrer</button>
-                    </th>
-                </tr>
-            </tbody>
-        </table>
-        <i class="col-6 fas fa-plus-square fa-2x text-right" v-if="appending===false" v-on:click="switch_appending"></i>
-        <i class="col-6 fas fa-minus-square fa-2x text-right" v-else v-on:click="switch_appending"></i>
-        <i class="col-6 fas fa-sync fa-2x text-left" v-on:click="refresh_bike_list"></i>
+                            <th v-if="bike.editing"><input type="text" placeholder="N° Cadre / Bicycode" v-model="bike.reference" v-on:keyup.enter="edit_bike(key)"/></th>
+                            <th @click="toggle_editing(key)" v-else>{{ bike.reference }}</th>
+
+                            <th>
+                               <a v-if="bike.picture !== null" v-bind:href="bike.picture" target="_blank"> <img v-bind:src="bike.picture" class="miniature"/></a>
+                                <span v-else>Aucune</span>
+                            </th>
+
+                            <th @click="change_robbed(key)">
+                                <div v-if="bike.robbed===false" class="button robb_button_peace" title="Ce vélo n'est pas volé. Déclarer un vol ?"></div>
+                                <div v-else class="button robb_button_robbed" title="Ce vélo est déclaré volé. Le déclarer trouvé ?"></div>
+                            </th>
+                            <th>
+                                <i v-if="bike.editing" @click="edit_bike(key)" class="button fas fa-save fa-2x" title="Sauvegarder les changements"></i>
+                            </th>
+                        </tr>
+                        <!-- TODO: Alert autotoggled when present -->
+                        <template v-if="bike.details_toggled">
+                            <!-- TODO : See coordinates on Gmap -->
+                            <tr v-for="alert in bike.alerts" class="alerts">
+                                <th colspan="2"><strong>Vu le {{ alert.date }}</strong></th>
+                                <th colspan="3" class="text-left">{{ alert.message }}</th>
+                            </tr>
+                        </template>
+                    </template>
+
+                    <!-- New bike interface -->
+                    <tr v-if="appending">
+                        <th><input type="text" placeholder="Nom de votre vélo" v-model="new_bike.name" /></th>
+                        <th><input type="text" placeholder="N° Cadre / Bicycode" v-model="new_bike.reference" /></th>
+                        <th><input type="file" id="picture" ref="picture" v-on:change="handleFileUpload()" /></th>
+                        <th>
+                            Oui
+                            <input type="radio" v-model="new_bike.robbed" v-bind:value="true" />
+                            <input type="radio" v-model="new_bike.robbed" v-bind:value="false" />
+                            Non
+                        </th>
+                        <th>
+                            <button v-on:click="register_bike">Enregistrer</button>
+                        </th>
+                    </tr>
+                </tbody>
+            </table>
+            <i class="button col-6 fas fa-plus-square fa-2x text-right" v-if="appending===false" v-on:click="switch_appending"></i>
+            <i class="button col-6 fas fa-minus-square fa-2x text-right" v-else v-on:click="switch_appending"></i>
+            <i class="button col-6 fas fa-sync fa-2x text-left" v-on:click="refresh_bike_list"></i>
+        </template>
     </div>
 </div>
 

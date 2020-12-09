@@ -14,7 +14,7 @@
 
 #TODO : Samaritain
     Filtre de base par localité trié par date de vol déclaré autour de l'utilisateur.
-    - Soit entrée coordonnées / Entrée adresse si refus de coord
+    X Soit entrée coordonnées / Entrée adresse si refus de coord
 
 # TODO :  Signaler vélo retrouvé (affichage sur l'interface user ET envoi mail)
     - Possibilité d'adjoindre commentaire (sugg. mail ou tel) + coordonnées de l'utilisateur

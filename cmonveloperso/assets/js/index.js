@@ -1,6 +1,3 @@
-let params = (new URL(document.location)).searchParams;
-let user = params.get("u");
-
 const API_ROOT = "http://127.0.0.1:8000/";
 
 var authentication = new Vue({
@@ -68,6 +65,7 @@ var authentication = new Vue({
                     console.log("Error :", error.response.data);
                     authentication.credentials.loginToken = "";
                     this.isAuthenticated = false ;
+                    bikeList.toggle_list = false ;
                 })
         },
         get_user: function () {
@@ -82,6 +80,7 @@ var authentication = new Vue({
                         authentication.user.email = response.data.email;
                         this.user = response.data;
                         this.isAuthenticated = true;
+                        bikeList.toggle_list = true;
                         bikeList.refresh_bike_list();
                     }
                 })
@@ -91,12 +90,14 @@ var authentication = new Vue({
                         sessionStorage.removeItem('authToken');
                         this.credentials.authToken = '';
                         this.isAuthenticated = false;
+                        bikeList.toggle_list = false;
                     }
                 })
         },
         log_out: function() {
             sessionStorage.removeItem('authToken');
             this.isAuthenticated = false;
+            bikeList.toggle_list = false;
             this.credentials = {
                 loginToken: '',
                 authToken: '',
@@ -127,6 +128,7 @@ var authentication = new Vue({
 var bikeList = new Vue({
     el: "#bikeList",
     data: {
+        toggle_list: false,
         bikeList: [],
         new_bike: {
             name:'',
@@ -150,8 +152,7 @@ var bikeList = new Vue({
         },
         toggle_editing: function(key) {
             bikeList.bikeList[key].editing = !bikeList.bikeList[key].editing
-        }
-        ,
+        },
         refresh_bike_list: function() {
             this.bikeList = [];
           axios.get(API_ROOT + this.endpoints.bikeListEp, {
@@ -167,7 +168,9 @@ var bikeList = new Vue({
                           picture: item.picture,
                           robbed: item.robbed,
                           pk: item.pk,
+                          alerts: item.alerts,
                           editing: false,
+                          details_toggled:false,
                       })
                   });
               })
@@ -177,28 +180,42 @@ var bikeList = new Vue({
         },
         register_bike: function(){
             let formData = new FormData();
-            formData.append('name', bikeList.new_bike.name);
-            formData.append('robbed', bikeList.new_bike.robbed);
-            formData.append('reference', bikeList.new_bike.reference);
-            formData.append('picture', bikeList.new_bike.picture);
-
-            axios.post(API_ROOT + this.endpoints.bikeListEp, formData, {
-                headers: {
-                    'Authorization': "Token " + authentication.credentials.authToken,
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-                .then(response => {
-                    bikeList.refresh_bike_list();
-                    bikeList.new_bike = {
-                        name:'',
-                        robbed:false,
-                        reference:'',
-                        picture: '',
-                    };
-                    bikeList.appending = false;
-
+            if (bikeList.new_bike.robbed) {
+                getUserCoordinates()
+                    .then(location => {
+                        formData.append('robbed_location', JSON.stringify(location));
+                        formData.append('name', bikeList.new_bike.name);
+                        formData.append('robbed', bikeList.new_bike.robbed);
+                        formData.append('reference', bikeList.new_bike.reference);
+                        formData.append('picture', bikeList.new_bike.picture);
+                        post_bike(formData);
+                    })
+            } else { // TODO : SEVERE DRY VIOLATION !
+                formData.append('name', bikeList.new_bike.name);
+                formData.append('robbed', bikeList.new_bike.robbed);
+                formData.append('reference', bikeList.new_bike.reference);
+                formData.append('picture', bikeList.new_bike.picture);
+                post_bike(formData);
+            }
+            function post_bike(formdata) {
+                axios.post(API_ROOT + bikeList.endpoints.bikeListEp, formData, {
+                    headers: {
+                        'Authorization': "Token " + authentication.credentials.authToken,
+                        'Content-Type': 'multipart/form-data'
+                    }
                 })
+                    .then(response => {
+                        bikeList.refresh_bike_list();
+                        bikeList.new_bike = {
+                            name: '',
+                            robbed: false,
+                            reference: '',
+                            picture: '',
+                        };
+                        bikeList.appending = false;
+
+                    })
+            }
         },
         change_robbed: function(id){
             let bike = bikeList.bikeList[id];
@@ -249,6 +266,9 @@ var bikeList = new Vue({
                 .catch(error => {
                     console.log(error);
                 })
+        },
+        toggle_detail: function(id) {
+            bikeList.bikeList[id].details_toggled = !bikeList.bikeList[id].details_toggled
         }
     }
 
@@ -281,17 +301,17 @@ function storageAvailable(type) {
 function getUserCoordinates() {
     return new Promise((resolve, reject) => {
         let coords = {
-            lat:'',
-            lon:'',
+            latitude:'',
+            longitude:'',
         };
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
-                coords.lat = position.coords.latitude;
-                coords.lon = position.coords.longitude;
+                coords.latitude = position.coords.latitude;
+                coords.longitude = position.coords.longitude;
                 resolve(coords);
             }, () => resolve({
-                lat:48.852969,
-                lon:2.349903,
+                latitude:48.852969,
+                longitude:2.349903,
             }))
         } else {
             reject(new Error("Failed to geolocate"));
