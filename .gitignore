@@ -4,3 +4,4 @@ cmonveloAPI/*.sqlite3
 cmonveloAPI/media/*
 !cmonveloAPI/media/bikes/default.jpg
 */assets/node_modules/
+wantedvelo/
