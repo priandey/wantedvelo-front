@@ -1,6 +1,10 @@
 body {
   background-color: #404040; }
 
+.container {
+  background-color: #87A0B2;
+  padding: 1rem 1rem; }
+
 .header {
   background-color: #F2B705; }
 

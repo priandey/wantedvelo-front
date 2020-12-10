@@ -22,6 +22,11 @@ body {
   background-color: $alerts;
 }
 
+.error {
+  color: red;
+  font-weight: bold;
+}
+
 .container {
   background-color: $primary-color;
   padding: 1rem 1rem;

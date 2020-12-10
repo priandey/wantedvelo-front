@@ -17,7 +17,7 @@
     X Soit entrée coordonnées / Entrée adresse si refus de coord
 
 # TODO :  Signaler vélo retrouvé (affichage sur l'interface user ET envoi mail)
-    - Possibilité d'adjoindre commentaire (sugg. mail ou tel) + coordonnées de l'utilisateur
+    X Possibilité d'adjoindre commentaire (sugg. mail ou tel) + coordonnées de l'utilisateur
     - Si vélo est signalé : Envoyer un seul mail, toggle signalé, et le reste se fait depuis l'interface user
 
 # TODO : Set up email backend

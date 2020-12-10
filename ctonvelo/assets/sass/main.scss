@@ -8,6 +8,11 @@ body {
   background-color: $background-color;
 }
 
+.container {
+  background-color: $primary-color;
+  padding: 1rem 1rem;
+}
+
 .header {
   background-color: $secondary-color;
 }

@@ -143,11 +143,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':
         ('rest_framework.authentication.TokenAuthentication',
-         )}
+         ),
+}
 
 PASSWORDLESS_AUTH = {
     'PASSWORDLESS_AUTH_TYPE': ['EMAIL'],
-    'PASSWORDLESS_EMAIL_NOREPLY_ADDRESS': 'noreply@wantedvelo.org'
+    'PASSWORDLESS_EMAIL_NOREPLY_ADDRESS': 'noreply@wantedvelo.org',
 }
 
 CORS_ALLOWED_ORIGINS = [

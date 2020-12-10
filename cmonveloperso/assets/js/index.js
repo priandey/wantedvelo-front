@@ -12,6 +12,10 @@ var authentication = new Vue({
             phone: '',
             username: '',
         },
+        error: {
+            errored: false,
+            error_message:'',
+        },
         // TODO : Error management object
         isAuthenticated: false,
         mail_sent: false,
@@ -40,10 +44,13 @@ var authentication = new Vue({
                     // Gerer la réponse
                     if (response.status === 200) {
                         authentication.mail_sent = true;
+                        authentication.error.errored = true;
+                        authentication.error.error_message = "Veuillez consulter le mail renseigné et recopier le token"
                     }
                 })
                 .catch(error => {
-                    console.log("Error :", error.response.data)
+                    authentication.error.errored = true;
+                    authentication.error.error_message = Object.entries(error.response.data)[0][1][0];
                 })
         },
         get_token: function () {
@@ -59,10 +66,12 @@ var authentication = new Vue({
                         authentication.credentials.loginToken = '';
                         authentication.credentials.authToken = response.data.token;
                         authentication.get_user();
+                        authentication.error.errored = false;
                     }
                 })
                 .catch(error => {
-                    console.log("Error :", error.response.data);
+                    authentication.error.errored = true;
+                    authentication.error.error_message = Object.entries(error.response.data)[0][1][0]
                     authentication.credentials.loginToken = "";
                     this.isAuthenticated = false ;
                     bikeList.toggle_list = false ;
@@ -144,6 +153,9 @@ var bikeList = new Vue({
     },
 
     methods: {
+        map_link: function(coords) {
+            return "https://maps.google.com/?q="+coords.lat+","+coords.lon
+        },
         handleFileUpload: function() {
             bikeList.new_bike.picture = bikeList.$refs.picture.files[0];
         },
