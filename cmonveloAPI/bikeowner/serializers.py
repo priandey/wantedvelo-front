@@ -8,7 +8,7 @@ class OwnerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Owner
-        fields = ['phone', 'username', 'email', 'bikes']
+        fields = ['phone', 'username', 'email', 'bikes']  # TODO : Bikes may be redundant
 
 
 class BikeOwnerSerializer(serializers.ModelSerializer):
@@ -17,4 +17,4 @@ class BikeOwnerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bike
-        fields = ['name', 'picture', 'reference', 'robbed', 'robbed_location', 'pk', 'owner', 'alerts']
+        fields = ['name', 'picture', 'reference', 'robbed', 'robbed_location', 'pk', 'owner', 'alerts']  # TODO : owner may be redundant

@@ -6,7 +6,7 @@ from .models import FoundAlert
 class BikePublicSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bike
-        fields = ['robbed', 'reference', 'robbed_location', 'details', 'picture']
+        fields = ['robbed', 'reference', 'robbed_location', 'details', 'picture']  # TODO : Useless 'robbed'
         read_only_fields = ['robbed', 'reference', 'robbed_location', 'details', 'picture']
 
 
