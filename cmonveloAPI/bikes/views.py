@@ -1,5 +1,20 @@
+from django.shortcuts import render
+from rest_framework import viewsets
+from .models import Bike, Owner, FoundAlert
+from .permissions import IsOwnerOrReadOnly
+from .serializers import BikeSerializer
+
+class BikeViewset(viewsets.ModelViewSet):
+    queryset = Bike.objects.all()
+    serializer_class = BikeSerializer
+    permission_classes = [IsOwnerOrReadOnly,]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
+
+'''
 import random
-from bikeowner.models import Bike
 from .models import FoundAlert
 from .serializers import BikePublicSerializer, FoundAlertSerializer
 from geopy.distance import distance as dist
@@ -61,3 +76,5 @@ class CreateFoundAlert(generics.CreateAPIView):
     def perform_create(self, serializer):
         bike = Bike.objects.get(reference=self.request.data['reference'])
         serializer.save(bike=bike)
+
+'''
