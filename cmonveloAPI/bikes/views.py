@@ -11,11 +11,21 @@ from .serializers import BikeSerializer
 class RobbedBikes(generics.ListCreateAPIView):
     """
         url: /
-        description: List of robbed bikes. Need pagination. Allow creation of new bikes for authenticated users
+        description: List of robbed bikes. Allow creation of new bikes for authenticated users
         params: {
                 {
                     name: "search_type"
-                    type: str() "all"/"near"
+                    type/desc: str() "all"/"near"
+                    required: False
+                },
+                {
+                    name: "lon"
+                    type/desc: float() longitude in radians
+                    required: False
+                },
+                {
+                    name: "lat"
+                    type/desc: float() latitude in radians
                     required: False
                 },
             }
@@ -25,7 +35,7 @@ class RobbedBikes(generics.ListCreateAPIView):
     """
     queryset = Bike.objects.filter(robbed=True)
     serializer_class = BikeSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
 
     def get_queryset(self):
         assert self.queryset is not None, (
@@ -36,7 +46,7 @@ class RobbedBikes(generics.ListCreateAPIView):
         search_type = self.request.query_params.get('search_type', default="all")
 
         if search_type == 'all':
-            queryset = self.queryset
+            queryset = self.queryset.order_by('pk')
 
         elif search_type == 'near':
             lon = self.request.query_params.get('lon', default="2.349903")  # Default coords are located in Paris
@@ -73,14 +83,16 @@ class RobbedBikes(generics.ListCreateAPIView):
 
         return result
 
-'''
+"""
     url: /bike/<int:pk>/
         description: Allow operation like reading editing or deleting one bike instance
         methods:
             GET:
             PUT:
             DELETE:
-            
+"""
+
+'''
     url: bike/<int:pk>/found/
         description: create a found alert linked to a robbed bike
         methods:

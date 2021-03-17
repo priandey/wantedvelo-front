@@ -1,7 +1,6 @@
-from rest_framework import routers
-from .views import BikeViewset
+from django.urls import path
+from .views import RobbedBikes
 
-router = routers.SimpleRouter()
-router.register(r'bike', BikeViewset)
-
-urlpatterns = router.urls
+urlpatterns = [
+    path("", RobbedBikes.as_view(), name="robbed_bikes")
+]
