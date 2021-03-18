@@ -1,13 +1,14 @@
 import random
+from pprint import PrettyPrinter
 from geopy.distance import distance as dist
 from django.db.models.query import QuerySet
 from rest_framework import generics, permissions
 from rest_framework.exceptions import ValidationError
 from .models import Bike, Owner, FoundAlert
 from .permissions import IsOwnerOrReadOnly
-from .serializers import BikeSerializer
+from .serializers import BikeOwnerSerializer, BikePublicSerializer, FoundAlertSerializer
 
-
+pp = PrettyPrinter()
 class RobbedBikes(generics.ListCreateAPIView):
     """
         url: /
@@ -34,7 +35,7 @@ class RobbedBikes(generics.ListCreateAPIView):
             POST:
     """
     queryset = Bike.objects.filter(robbed=True)
-    serializer_class = BikeSerializer
+    serializer_class = BikePublicSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
 
     def get_queryset(self):
@@ -70,7 +71,7 @@ class RobbedBikes(generics.ListCreateAPIView):
         return queryset
 
     def get_by_geolocation(self, coords):
-        weighted_bikes = {}
+        weighted_bikes = dict()
         result = []
         for bike in Bike.objects.filter(robbed=True):
             distance = dist((bike.robbed_location['latitude'], bike.robbed_location['longitude']), coords).km
@@ -83,21 +84,54 @@ class RobbedBikes(generics.ListCreateAPIView):
 
         return result
 
-"""
-    url: /bike/<int:pk>/
-        description: Allow operation like reading editing or deleting one bike instance
-        methods:
-            GET:
-            PUT:
-            DELETE:
-"""
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
-'''
-    url: bike/<int:pk>/found/
-        description: create a found alert linked to a robbed bike
-        methods:
-            POST:
-            
+
+class BikeDetail(generics.RetrieveUpdateDestroyAPIView):
+    """
+        url: /bike/<int:pk>/
+            description: Allow operation like reading editing or deleting one bike instance
+            methods:
+                GET:
+                PUT:
+                PATCH:
+                DELETE:
+    """
+    queryset = Bike.objects.all()
+    lookup_field = "pk"
+    permission_classes = [IsOwnerOrReadOnly,]
+
+    def get_serializer_class(self, *args, **kwargs):
+        if self.request.user.is_authenticated and self.request.user == self.get_object().owner:
+            return BikeOwnerSerializer
+        else:
+            return BikePublicSerializer
+
+
+class FoundBike(generics.CreateAPIView):
+    """
+        url: bike/<int:pk>/found/
+            description: create a found alert linked to a robbed bike
+            methods:
+                POST:
+                {
+                    message: str(),
+                    coords:
+                    {
+                        lon: float(),
+                        lat: float()
+                    }
+                }
+    """
+    queryset = FoundAlert.objects.all()
+    serializer_class = FoundAlertSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(bike=Bike.objects.get(pk=self.kwargs['pk']))
+
+
+'''            
     url: /traits/
         description: List of matching traits
         params: {

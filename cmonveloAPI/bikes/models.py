@@ -16,7 +16,7 @@ class Detail(models.Model):
 
 class Bike(models.Model):
     owner = models.ForeignKey('Owner', on_delete=models.CASCADE, related_name="bikes")
-    details = models.ManyToManyField(Detail, related_name="bikes", null=True, blank=True)
+    details = models.ManyToManyField(Detail, related_name="bikes", blank=True)
     name = models.CharField(max_length=100, null=False, blank=False)
     robbed = models.BooleanField(default=False, null=False)
     reference = models.CharField(max_length=255, unique=True)
