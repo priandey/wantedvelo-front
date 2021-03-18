@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import RobbedBikes, BikeDetail, FoundBike
+from .views import RobbedBikesView, BikeDetailView, FoundBikeView, TraitsView
 
 urlpatterns = [
-    path("", RobbedBikes.as_view(), name="robbed_bikes"),
-    path("bike/<int:pk>/", BikeDetail.as_view(), name="bike_detail"),
-    path("bike/<int:pk>/found/", FoundBike.as_view(), name="bike_found"),
+    path("", RobbedBikesView.as_view(), name="robbed_bikes"),
+    path("bike/<int:pk>/", BikeDetailView.as_view(), name="bike_detail"),
+    path("bike/<int:pk>/found/", FoundBikeView.as_view(), name="bike_found"),
+    path("traits/", TraitsView.as_view(), name="traits"),
 ]

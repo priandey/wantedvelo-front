@@ -1,6 +1,10 @@
 from rest_framework import serializers
-from .models import Owner, Bike, FoundAlert, Detail
+from .models import Owner, Bike, FoundAlert, Trait
 
+class TraitSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Trait
+        fields = ['name']
 
 class FoundAlertSerializer(serializers.ModelSerializer):
     date = serializers.DateTimeField(format="%d/%m/%y à %Hh%M", read_only=True)
@@ -22,21 +26,21 @@ class OwnerSerializer(serializers.ModelSerializer):
 
 class BikeOwnerSerializer(serializers.ModelSerializer):
     owner = serializers.PrimaryKeyRelatedField(read_only=True)
-    details = serializers.StringRelatedField(many=True)
+    traits = serializers.PrimaryKeyRelatedField(queryset=Trait.objects.all, many=True)
     alerts = FoundAlertSerializer(many=True, read_only=True)
 
     class Meta:
         model = Bike
-        fields = ['name', 'picture', 'reference', 'details', 'robbed', 'robbed_location', 'pk', 'owner', 'alerts']
+        fields = ['name', 'picture', 'reference', 'traits', 'robbed', 'robbed_location', 'pk', 'owner', 'alerts']
         read_only_fields = ['pk', 'owner', 'alerts']
 
 
 class BikePublicSerializer(serializers.ModelSerializer):
     owner = serializers.HiddenField(default=0)
     name = serializers.CharField(write_only=True, allow_blank=True)
-    details = serializers.StringRelatedField(many=True)
+    traits = serializers.PrimaryKeyRelatedField(queryset=Trait.objects.all, many=True)
 
     class Meta:
         model = Bike
-        fields = ['name', 'picture', 'reference', 'details', 'robbed', 'robbed_location', 'pk', 'owner']
+        fields = ['name', 'picture', 'reference', 'traits', 'robbed', 'robbed_location', 'pk', 'owner']
         read_only_fields = ['pk',]
