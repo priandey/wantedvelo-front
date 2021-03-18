@@ -3,7 +3,7 @@ import os
 from faker import Faker
 from django.core.management.base import BaseCommand
 from django.core.files import File
-from bikeowner.models import Owner, Bike
+from ...models import Owner, Bike
 
 class Command(BaseCommand):
     help ='Populate the db with x users, earch one with 1 to 4 bikes associated'
@@ -16,7 +16,10 @@ class Command(BaseCommand):
         bike_count = 0
 
         while bike_count < options['bike_number'][0]:
-            new_owner = Owner.objects.create(username=fake.name(), email=fake.email(), phone=fake.phone_number())
+            new_owner = Owner.objects.create(
+                username=fake.name(),
+                email=fake.email(),
+            )
             for i in range(randint(1,4)):
                 bike = Bike.objects.create(
                     owner=new_owner,
