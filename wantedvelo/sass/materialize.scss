@@ -39,3 +39,11 @@
 @import "components/pulse";
 @import "components/datepicker";
 @import "components/timepicker";
+
+.flex-box {
+  display: flex;
+}
+
+.flex-box > li {
+  flex-basis: 33.33%;
+}

@@ -6524,3 +6524,9 @@ input[type=range]::-ms-thumb {
     bottom: auto;
     text-align: center;
     margin-top: 1.2rem; } }
+
+.flex-box {
+  display: flex; }
+
+.flex-box > li {
+  flex-basis: 33.33%; }
