@@ -2,12 +2,19 @@ import random
 
 from django.db.models.query import QuerySet
 from rest_framework import generics, permissions
+from rest_framework.decorators import api_view, authentication_classes
+from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from geopy.distance import distance as dist
 
 from .models import Bike, FoundAlert, Trait
 from .serializers import BikeOwnerSerializer, BikePublicSerializer, FoundAlertSerializer, TraitSerializer
 from .permissions import IsOwnerOrReadOnly
+
+@api_view(['GET',])
+def VerifyToken(request):
+    print(request.user)
+    return Response(status=200)
 
 
 class RobbedBikesView(generics.ListCreateAPIView):

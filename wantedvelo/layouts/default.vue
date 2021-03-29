@@ -15,15 +15,15 @@
 
       <template v-slot:extension v-tabs>
         <v-tabs
+          grow
           centered
           right
-          grow
           active-class="active-tab"
         >
           <v-tabs-slider color="yellow"></v-tabs-slider>
 
           <v-tab>
-            Derniers vols
+            Derniers avis de recherche
           </v-tab>
           <v-tab>
               <v-icon>mdi-crosshairs-gps</v-icon>
