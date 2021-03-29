@@ -33,8 +33,9 @@ class BikePublicSerializer(serializers.ModelSerializer):
     owner = serializers.HiddenField(default=0)
     name = serializers.CharField(write_only=True, allow_blank=True)
     traits = serializers.PrimaryKeyRelatedField(queryset=Trait.objects.all(), many=True)
+    date_of_robbery = serializers.DateTimeField(format="%x %X")
 
     class Meta:
         model = Bike
-        fields = ['name', 'picture', 'reference', 'traits', 'robbed', 'robbed_location', 'pk', 'owner']
+        fields = ['name', 'picture', 'reference', 'traits', 'robbed', 'robbed_location', 'date_of_robbery', 'pk', 'owner']
         read_only_fields = ['pk',]

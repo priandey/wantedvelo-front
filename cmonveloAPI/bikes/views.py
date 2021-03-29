@@ -7,14 +7,16 @@ from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from geopy.distance import distance as dist
 
-from .models import Bike, FoundAlert, Trait
+from .models import Bike, Owner, FoundAlert, Trait
 from .serializers import BikeOwnerSerializer, BikePublicSerializer, FoundAlertSerializer, TraitSerializer
 from .permissions import IsOwnerOrReadOnly
 
 @api_view(['GET',])
 def VerifyToken(request):
-    print(request.user)
-    return Response(status=200)
+    if isinstance(request.user, Owner):
+        return Response(status=200)
+    else:
+        return Response(status=401)
 
 
 class RobbedBikesView(generics.ListCreateAPIView):

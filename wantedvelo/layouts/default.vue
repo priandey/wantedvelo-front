@@ -36,8 +36,8 @@
     </v-toolbar>
 
   </v-card>
-
-        <Nuxt />
+      <Nuxt />
+      <AuthenticationPannel />
     </v-app>
 </template>
 
