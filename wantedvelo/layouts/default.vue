@@ -22,10 +22,12 @@
         >
           <v-tabs-slider color="yellow"></v-tabs-slider>
 
-          <v-tab>
+          <v-tab
+          to="/">
             Derniers avis de recherche
           </v-tab>
-          <v-tab>
+          <v-tab
+          to="near">
               <v-icon>mdi-crosshairs-gps</v-icon>
           </v-tab>
           <v-tab>
