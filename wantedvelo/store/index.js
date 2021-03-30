@@ -12,14 +12,12 @@ export const state = () => ({
 })
 
 export const mutations = {
-  authenticate(state, authToken) {
+  authenticate(state) {
     state.auth.isAuthenticated = true;
-    state.auth.authToken = authToken;
   },
 
   reset(state) {
     state.isAuthenticated = false;
-    state.authToken = '';
   },
 
   setPoint(state, point) {

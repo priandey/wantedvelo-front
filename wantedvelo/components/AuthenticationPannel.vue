@@ -82,8 +82,8 @@
               sessionStorage.setItem('authToken', response.data.token);
               this.mail_sent = false;
               this.credentials.loginToken = '';
-              this.$store.commit('authenticate', response.data.token);
-              this.$axios.setToken(response.data.token, 'Token') //todo: Determine scope of $axios token
+              this.$store.commit('authenticate');
+              this.$axios.setToken(response.data.token, 'Token');
               this.error.errored = false;
               this.sheet = false;
             }
@@ -102,8 +102,8 @@
         })
           .then(response => {
             if (response.status === 200) {
-              this.$store.commit('authenticate', token);
-              this.$axios.setToken(token, 'Token'); //todo: Determine scope of $axios token;
+              this.$store.commit('authenticate');
+              this.$axios.setToken(token, 'Token');
               this.sheet = false;
               return true
             } else {
