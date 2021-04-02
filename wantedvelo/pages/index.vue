@@ -37,14 +37,9 @@
                 </v-card>
             </v-col>
         </v-row>
-          <v-card id="infiniteLoading"
-               v-intersect="{
-              handler: infiniteScroll,
-              options: {
-                 threshold:1.0
-                }
-              }"
-          height="100"></v-card> <!-- TODO : Load twice -->
+          <v-row>
+            <v-col><v-progress-linear indeterminate v-intersect="infiniteScroll"></v-progress-linear></v-col>
+          </v-row>
     </v-container>
       <v-btn
         color="primary"
@@ -68,7 +63,7 @@
           bikes: "/bikes/"
         },
         bikes: [],
-        bikeCount: 12,
+        bikeCount: 18,
         bikeOffset: 0,
       }
     },
@@ -92,9 +87,11 @@
             })
           })
       },
-      infiniteScroll () {
-        this.get_bikes(this.bikeCount, this.bikeOffset);
-        this.bikeOffset += 12;
+      infiniteScroll (entries, observer, isIntersecting) {
+        if (isIntersecting) {
+            this.get_bikes(this.bikeCount, this.bikeOffset);
+            this.bikeOffset += 18;
+        }
       },
     },
 

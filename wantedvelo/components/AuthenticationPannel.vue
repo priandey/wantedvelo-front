@@ -36,7 +36,7 @@
           errored: false,
           error_message:'',
         },
-        sheet:true,
+        sheet:false,
         mail_sent: false,
         open_edition: false,
         // API Endpoints below
