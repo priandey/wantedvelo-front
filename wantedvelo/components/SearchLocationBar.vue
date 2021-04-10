@@ -1,5 +1,5 @@
 <template>
-    <!-- Todo: The component -->
+    <!-- Todo: selected should unselect when erasing content-->
   <v-card
     color="secondary"
     dark

@@ -1,4 +1,4 @@
-<template>
+<template app>
     <v-main>
       <v-card>
         <SearchLocationBar></SearchLocationBar>

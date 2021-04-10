@@ -1,4 +1,4 @@
-<template>
+<template app>
     <v-main>
         <v-container>
             <v-row>
@@ -10,9 +10,13 @@
                 sm="6"
                 cols="12"
                 >
+                  <v-dialog
+                  :width="dialogWidth">
+                    <template v-slot:activator="{ on, attrs }">
                 <v-card
                 height="250"
                 hover
+                v-on="on"
                 >
                   <v-img
                   v-bind:src="bike.picture"
@@ -20,7 +24,8 @@
                   max-height="160"
                   >
                   </v-img>
-                  <v-card-title>{{ bike.reference }}
+                  <v-card-title>
+                    {{ bike.reference }}
                     <v-card-actions>
                     <v-btn
                       color="primary"
@@ -35,6 +40,12 @@
                   </v-card-actions></v-card-title>
                   <v-card-subtitle>{{ bike.robbery_date}}</v-card-subtitle>
                 </v-card>
+                    </template>
+                    <bike-alert
+                      :bike-id="bike.pk"
+                      in-modal="true"></bike-alert>
+                  </v-dialog>
+
             </v-col>
         </v-row>
           <v-row>
@@ -65,6 +76,7 @@
         bikes: [],
         bikeCount: 18,
         bikeOffset: 0,
+        showModal: false,
       }
     },
     methods : {
@@ -91,6 +103,22 @@
         if (isIntersecting) {
             this.get_bikes(this.bikeCount, this.bikeOffset);
             this.bikeOffset += 18;
+        }
+      },
+    },
+    computed: {
+      dialogWidth() {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs':
+            return "80vw";
+          case 'sm':
+            return "80vw";
+          case 'md':
+            return "50vw";
+          case 'lg':
+            return "50vw";
+          case 'xl':
+            return "50vw"
         }
       },
     },
