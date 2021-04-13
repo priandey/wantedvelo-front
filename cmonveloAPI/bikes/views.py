@@ -52,7 +52,7 @@ class RobbedBikesView(generics.ListCreateAPIView):
         search_type = self.request.query_params.get('search_type', default="all")
 
         if search_type == 'all':
-            queryset = self.queryset.order_by('pk')
+            queryset = self.queryset.order_by('-date_of_robbery')
 
         elif search_type == 'near':
             lon = self.request.query_params.get('lon', default="2.349903")  # Default coords are located in Paris

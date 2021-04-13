@@ -6,7 +6,7 @@
         <v-btn @click="centerElsewhere"></v-btn>
       </v-card>
       <v-img> <!-- Map is warped in an image to prevent clashes between vuetify z-index (0-10) and leaflet z-index (100-1100) -->
-      <div id="map-wrap" style="height: 100vh">
+      <div id="map-wrap" style="height: 75vh">
           <l-map :zoom=9 :center="centerPoint">
             <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
             <l-marker

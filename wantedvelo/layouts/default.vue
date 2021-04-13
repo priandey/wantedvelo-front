@@ -9,8 +9,10 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
+      <v-btn
+        icon
+        @click="logout">
+        <v-icon>mdi-logout-variant</v-icon>
       </v-btn>
 
       <template v-slot:extension v-tabs>
@@ -44,6 +46,13 @@
 </template>
 
 <script>
+  export default {
+    methods: {
+      logout () {
+        this.$store.commit("resetAuth");
+      },
+    }
+  }
 </script>
 
 <style lang="scss" scoped>

@@ -36,7 +36,6 @@
           errored: false,
           error_message:'',
         },
-        sheet:false,
         mail_sent: false,
         open_edition: false,
         // API Endpoints below
@@ -44,6 +43,16 @@
         send_token_ep: "pwl/auth/token/",
         verify_auth_token_ep: "pwl/verify/",
       }
+    },
+    computed : {
+      sheet : {
+        get () {
+          return this.$store.state.auth.showPannel
+        },
+        set() {
+          this.$store.commit('closeAuthPannel')
+        }
+      },
     },
     mounted () {
       if (storageAvailable('sessionStorage')) {
@@ -85,7 +94,6 @@
               this.$store.commit('authenticate');
               this.$axios.setToken(response.data.token, 'Token');
               this.error.errored = false;
-              this.sheet = false;
             }
           })
           .catch(error => {
@@ -102,9 +110,8 @@
         })
           .then(response => {
             if (response.status === 200) {
-              this.$store.commit('authenticate');
+              this.$store.commit('authenticate', token);
               this.$axios.setToken(token, 'Token');
-              this.sheet = false;
               return true
             } else {
               return false

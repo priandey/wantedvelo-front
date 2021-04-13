@@ -22,7 +22,7 @@ class Bike(models.Model):
     reference = models.CharField(max_length=255, unique=True)
     picture = models.ImageField(upload_to="bikes/", null=True, default="bikes/default.jpg", max_length=255)
     robbed_location = models.JSONField(null=True, blank=True)
-    date_of_robbery = models.DateTimeField(null=True)
+    date_of_robbery = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name

@@ -59,9 +59,11 @@
         bottom
         :style="{left: '50%', transform:'translateX(-50%)'}"
         fab
+        @click="addBike"
       >
         <v-icon>mdi-plus</v-icon>
       </v-btn>
+      <new-bike></new-bike>
 </v-main>
 </template>
 
@@ -104,6 +106,12 @@
             this.get_bikes(this.bikeCount, this.bikeOffset);
             this.bikeOffset += 18;
         }
+      },
+      addBike(){
+        if (this.$store.state.auth.isAuthenticated === false) {
+          this.$store.commit('openAuthPannel')
+        }
+        this.$store.commit('openBikePannel');
       },
     },
     computed: {
