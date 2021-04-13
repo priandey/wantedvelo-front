@@ -3,6 +3,7 @@ from .models import Owner, Bike, FoundAlert, Trait
 
 
 class TraitSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Trait
         fields = ['name']
@@ -32,7 +33,7 @@ class BikeOwnerSerializer(serializers.ModelSerializer):
 class BikePublicSerializer(serializers.ModelSerializer):
     owner = serializers.HiddenField(default=0)
     name = serializers.CharField(write_only=True, allow_blank=True)
-    traits = serializers.PrimaryKeyRelatedField(queryset=Trait.objects.all(), many=True, allow_empty=True, allow_null=True)
+    traits = TraitSerializer(many=True, required=False)
     date_of_robbery = serializers.DateTimeField(format="%x %X", read_only=True)
 
     class Meta:

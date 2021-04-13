@@ -1,9 +1,13 @@
 <template>
+  <!-- TODO : 2-time information. First with info and picture, second with traits -->
     <v-bottom-sheet
     v-model="openPannel"
     inset
     transition="slide-x-transition"
     overlay-opacity="0.9">
+      <locate-user
+        auto-locate
+        hide></locate-user>
       <v-form v-model="isValid">
         <v-text-field
           v-model="bike.name"
@@ -60,7 +64,6 @@
               name: null,
               reference: null,
               file: null,
-              traits: {},
               robbed:true,
             },
             imageRules: [
@@ -77,7 +80,22 @@
       methods: {
           submit() {
             if (this.isValid) {
-              this.$axios.post('/', this.bike)
+              var form_data = new FormData();
+              form_data.append('robbed_location', JSON.stringify({
+                latitude: this.$store.state.localisation.point.lat,
+                longitude: this.$store.state.localisation.point.lon
+              }));
+              form_data.append('name', this.bike.name);
+              form_data.append('robbed', this.bike.robbed);
+              form_data.append('reference', this.bike.reference);
+              form_data.append('picture', this.bike.file);
+
+              this.$axios.post('/', form_data, {
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                }
+              })
+                .then(bike => {this.bike = bike.data})
             }
           },
       }

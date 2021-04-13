@@ -3,7 +3,6 @@
       <v-card>
         <SearchLocationBar></SearchLocationBar>
         <LocateUser></LocateUser>
-        <v-btn @click="centerElsewhere"></v-btn>
       </v-card>
       <v-img> <!-- Map is warped in an image to prevent clashes between vuetify z-index (0-10) and leaflet z-index (100-1100) -->
       <div id="map-wrap" style="height: 75vh">

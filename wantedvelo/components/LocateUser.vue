@@ -5,6 +5,7 @@
         dark
         v-bind="attrs"
         v-on="on"
+        v-if="!hide"
         @click="updateCoords"
       >
         <v-icon>mdi-crosshairs-gps</v-icon>
