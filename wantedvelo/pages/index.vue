@@ -63,7 +63,7 @@
       >
         <v-icon>mdi-plus</v-icon>
       </v-btn>
-      <new-bike></new-bike>
+      <new-bike @creationEnded="refresh"></new-bike>
 </v-main>
 </template>
 
@@ -82,6 +82,12 @@
       }
     },
     methods : {
+      refresh() {
+        this.bikes = [];
+        this.bikeOffset = 0;
+        this.get_bikes(this.bikeCount, this.bikeOffset);
+        this.bikeOffset += 18;
+      },
       get_bikes (itemcount, itemOffset) {
         this.$axios.get('', {
           params: {

@@ -10,6 +10,8 @@
       deletable-chips
       clearable
       multiple
+      hide-no-data
+      menu-props="top"
       @change="updateTraits"
     ></v-combobox>
 </template>

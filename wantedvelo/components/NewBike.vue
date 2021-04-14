@@ -4,10 +4,16 @@
     v-model="openPannel"
     inset
     transition="slide-x-transition"
-    overlay-opacity="0.9">
+    overlay-opacity="0.9"
+    persistent>
       <locate-user
         auto-locate
         hide></locate-user>
+      <v-card>
+      <v-progress-linear
+      v-if="isLoading"
+      indeterminate></v-progress-linear>
+      <v-container v-if="!isLoading && !isSent">
       <v-form v-model="isValid">
         <v-text-field
           v-model="bike.name"
@@ -43,9 +49,15 @@
       <v-btn
       @click="submit"
       :disabled="!isValid">Enregistrer mon vélo</v-btn>
+      </v-container>
+      <v-container v-if="!isLoading && isSent">
+        <v-card-title><v-icon color="primary">mdi-check</v-icon>Votre vélo a bien été enregistré comme volé</v-card-title>
+      </v-container>
+        <v-card-actions><v-btn @click="endCreation">Fermer</v-btn></v-card-actions>
+      </v-card>
     </v-bottom-sheet>
 </template>
-<!-- fields : 'name', 'picture', 'reference', -->
+
 <script>
     export default {
         name: "NewBike",
@@ -62,6 +74,8 @@
         data () {
           return {
             isValid:false,
+            isLoading:false,
+            isSent:false,
             bike: {
               name: null,
               reference: null,
@@ -92,6 +106,7 @@
               form_data.append('robbed', this.bike.robbed);
               form_data.append('reference', this.bike.reference);
               form_data.append('picture', this.bike.file);
+              this.isLoading = true;
 
               this.$axios.post('/', form_data, {
                 headers: {
@@ -101,11 +116,20 @@
                 .then(bike => {
                   this.bike = bike.data;
                   this.$axios.patch('/bike/'+this.bike.pk+"/", {traits:this.traits})
+                    .then(response => {
+                      this.isLoading = false;
+                      this.isSent = true;
+                    })
                 })
             }
           },
           updateTraits(traitsList) {
             this.traits = traitsList
+          },
+          endCreation() {
+            this.$emit("creationEnded");
+            this.isSent = false;
+            this.$store.commit('closeBikePannel');
           }
       }
     }
