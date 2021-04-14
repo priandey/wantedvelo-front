@@ -43,6 +43,7 @@
               this.$axios.post('/traits/', {name:newItem})
                 .then(response => {this.items.push(newItem)})
             }
+            this.$emit('updateTraitsList', this.select)
           },
       },
     }

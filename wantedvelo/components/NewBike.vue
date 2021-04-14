@@ -38,7 +38,8 @@
             show-size
           ></v-file-input>
       </v-form>
-      <search-create-traits></search-create-traits>
+      <search-create-traits
+      @updateTraitsList="updateTraits"></search-create-traits>
       <v-btn
       @click="submit"
       :disabled="!isValid">Enregistrer mon vélo</v-btn>
@@ -67,6 +68,7 @@
               file: null,
               robbed:true,
             },
+            traits: [],
             imageRules: [
               v => !!v || 'Une image est requise',
               v => (v && v.size < 2000000) || 'Votre image est trop lourde (2MB max)',
@@ -96,9 +98,15 @@
                   'Content-Type': 'multipart/form-data'
                 }
               })
-                .then(bike => {this.bike = bike.data})
+                .then(bike => {
+                  this.bike = bike.data;
+                  this.$axios.patch('/bike/'+this.bike.pk+"/", {traits:this.traits})
+                })
             }
           },
+          updateTraits(traitsList) {
+            this.traits = traitsList
+          }
       }
     }
 </script>
