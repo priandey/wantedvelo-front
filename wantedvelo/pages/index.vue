@@ -2,6 +2,7 @@
     <v-main>
         <v-container>
             <v-row>
+              <!--TODO : Refactor Bike dialog in component to use it in near.vue -->
                 <v-col
                 v-for="bike in this.bikes"
                 :key="bike.pk"

@@ -33,6 +33,7 @@
         isLoading: false,
         model: null,
         search: null,
+
       }),
       computed: {
           items() {
@@ -42,18 +43,21 @@
       watch: {
         search (val) {
           // Items have already been requested
-          if (this.isLoading) return
+          if (this.isLoading) return;
+          // Using another axios instance to communicate with api-adresse.data.gouv.fr to protect authorization token
+          let axiosInstance = this.$axios.create();
+          delete axiosInstance.defaults.headers.common;
 
           this.isLoading = true;
           this.entries = [];
 
-          this.$axios.get("https://api-adresse.data.gouv.fr/search/", {
+          axiosInstance.get("https://api-adresse.data.gouv.fr/search/", {
             params: {
               q:val,
               type: "municipality",
               autocomplete:"1",
               limit:"5"
-            }
+            },
           })
             .then(response => response.data.features)
             .then(response => {

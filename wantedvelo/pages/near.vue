@@ -56,7 +56,7 @@
               search_type: 'near',
               lon: this.centerPoint[1],
               lat: this.centerPoint[0],
-              limit: 40
+              limit: 80
             }
           })
             .then(response => response.data.results)
