@@ -152,10 +152,11 @@ class TraitsView(generics.ListCreateAPIView):
                 POST:
 
     """
-    queryset = Trait.objects
+    queryset = Trait.objects.all()
     permission_classes = [permissions.IsAuthenticated,]
     serializer_class = TraitSerializer
 
+    ''' Disabled for testing purpose
     def get_queryset(self):
         query_string = self.request.query_params.get("qs", default="")
-        return self.queryset.filter(name__istartswith=query_string)
+        return self.queryset.filter(name__istartswith=query_string)'''

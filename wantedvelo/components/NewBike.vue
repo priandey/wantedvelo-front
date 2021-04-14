@@ -38,6 +38,7 @@
             show-size
           ></v-file-input>
       </v-form>
+      <search-create-traits></search-create-traits>
       <v-btn
       @click="submit"
       :disabled="!isValid">Enregistrer mon vélo</v-btn>
