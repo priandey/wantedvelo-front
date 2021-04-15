@@ -29,7 +29,7 @@
             Derniers avis de recherche
           </v-tab>
           <v-tab
-          to="near">
+          to="/near">
               <v-icon>mdi-crosshairs-gps</v-icon>
           </v-tab>
           <v-tab>

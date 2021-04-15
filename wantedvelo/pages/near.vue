@@ -8,15 +8,24 @@
       <div id="map-wrap" style="height: 75vh">
           <l-map :zoom=9 :center="centerPoint">
             <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
-            <l-marker
-              v-for="bike in bikes"
-              v-bind:key="bike.pk"
-              :lat-lng="[bike.robbed_location.latitude, bike.robbed_location.longitude]">
-              <l-tooltip><v-card width="150"><v-card-title>{{ bike.reference}}</v-card-title></v-card></l-tooltip>
-            </l-marker>
+                <l-marker
+                  v-for="bike in bikes"
+                  v-bind:key="bike.pk"
+                  :lat-lng="[bike.robbed_location.latitude, bike.robbed_location.longitude]"
+                  @click="openDialog($event,bike.pk)"
+                >
+                  <l-tooltip><v-img :src="bike.picture" max-width="250"></v-img></l-tooltip>
+                </l-marker>
           </l-map>
       </div>
       </v-img>
+      <v-dialog
+      v-model="dialog">
+        <bike-alert
+          v-if="dialog"
+          :bike-id="selected"
+          in-modal="true"></bike-alert>
+      </v-dialog>
     </v-main>
 </template>
 
@@ -25,15 +34,16 @@
         name: "near",
         data() {
           return {
-            bikes: []
+            bikes: [],
+            selected: null,
+            dialog:false,
           }
         },
         methods: {
-          centerElsewhere() {
-            this.$store.commit('setPoint', {
-              lat:32,
-              lon: 54,
-            });
+          openDialog(event,bikePk) {
+            this.selected = bikePk;
+            this.dialog = true;
+            return false // Dirty way to stop event propagation manually
           }
         },
         computed: {
