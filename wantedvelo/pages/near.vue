@@ -6,7 +6,7 @@
       </v-card>
       <v-img> <!-- Map is warped in an image to prevent clashes between vuetify z-index (0-10) and leaflet z-index (100-1100) -->
       <div id="map-wrap" style="height: 75vh">
-          <l-map :zoom=9 :center="centerPoint">
+          <l-map :zoom=9 :center="centerPoint" @update:center="updateCenter($event)"> <!-- TODO: Feature idea => Component should react to zoom change by expanding its near circle accordingly -->
             <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
                 <l-marker
                   v-for="bike in bikes"
@@ -37,6 +37,7 @@
             bikes: [],
             selected: null,
             dialog:false,
+            boundary: 50,
           }
         },
         methods: {
@@ -44,7 +45,11 @@
             this.selected = bikePk;
             this.dialog = true;
             return false // Dirty way to stop event propagation manually
-          }
+          },
+          updateCenter(e) {
+            this.$store.commit('setPoint', {lat:e.lat, lon:e.lng});
+          },
+
         },
         computed: {
           centerPoint() {
