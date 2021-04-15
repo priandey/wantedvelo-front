@@ -32,7 +32,9 @@
           to="/near">
               <v-icon>mdi-crosshairs-gps</v-icon>
           </v-tab>
-          <v-tab>
+          <v-tab
+          to="/owned"
+          @click="verifyAuth">
             Mes vélos
           </v-tab>
         </v-tabs>
@@ -51,6 +53,11 @@
       logout () {
         this.$store.commit("resetAuth");
       },
+      verifyAuth() {
+        if (!this.$store.state.auth.isAuthenticated) {
+          this.$store.commit('openAuthPannel')
+        }
+      }
     }
   }
 </script>

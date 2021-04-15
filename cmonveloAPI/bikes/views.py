@@ -26,7 +26,7 @@ class RobbedBikesView(generics.ListCreateAPIView):
         params: {
                 {
                     name: "search_type"
-                    type/desc: str() "all"/"near"
+                    type/desc: str() "all"/"near"/"owned"
                     required: False
                 },
                 {
@@ -45,14 +45,25 @@ class RobbedBikesView(generics.ListCreateAPIView):
             POST:
     """
     queryset = Bike.objects.filter(robbed=True)
-    serializer_class = BikePublicSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly,]
+
+    def get_serializer_class(self, *args, **kwargs):
+        if self.request.user.is_authenticated and self.request.query_params.get('search_type', default="all") == "owned":
+            return BikeOwnerSerializer
+        else:
+            return BikePublicSerializer
 
     def get_queryset(self):
         search_type = self.request.query_params.get('search_type', default="all")
 
         if search_type == 'all':
             queryset = self.queryset.order_by('-date_of_robbery')
+
+        elif search_type == 'owned':
+            try:
+                queryset = self.queryset.filter(owner=self.request.user)
+            except TypeError:
+                raise ValidationError(detail="Invalid authentication Token")
 
         elif search_type == 'near':
             lon = self.request.query_params.get('lon', default="2.349903")  # Default coords are located in Paris

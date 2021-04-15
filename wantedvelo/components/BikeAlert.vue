@@ -1,5 +1,6 @@
 <template>
   <v-card>
+    <v-container>
   <v-img
     :src="bike.picture"
     max-height="50vh"
@@ -16,6 +17,7 @@
         </l-map>
       </div>
       </template>
+    </v-container>
   </v-card>
 </template>
 
