@@ -13,33 +13,40 @@
                   <v-dialog
                   :width="dialogWidth">
                     <template v-slot:activator="{ on, attrs }">
-                <v-card
-                height="250"
-                hover
-                v-on="on"
-                >
-                  <v-img
-                  v-bind:src="bike.picture"
-                  gradient="rgba(0,0,0,.5), rgba(0,0,0,.23)"
-                  max-height="160"
-                  >
-                  </v-img>
-                  <v-card-title>
-                    {{ bike.reference }}
-                    <v-card-actions>
-                    <v-btn
-                      color="primary"
-                      dark
-                      small
-                      absolute
-                      center
-                      right
-                    >
-                      <v-icon>mdi-eye-plus-outline</v-icon>
-                    </v-btn>
-                  </v-card-actions></v-card-title>
-                  <v-card-subtitle>{{ bike.robbery_date}}</v-card-subtitle>
-                </v-card>
+                      <v-card
+                      height="250"
+                      hover
+                      v-on="on"
+                      >
+                        <v-img
+                        v-bind:src="bike.picture"
+                        gradient="rgba(0,0,0,.5), rgba(0,0,0,.23)"
+                        max-height="160"
+                        >
+                        </v-img>
+                        <v-card-title>
+                          {{ bike.reference }}
+                          <v-card-actions>
+                            <v-dialog
+                            :width="dialogWidth">
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                color="primary"
+                                dark
+                                medium
+                                absolute
+                                center
+                                right
+                                v-on="on"
+                                >
+                                    <v-icon large>mdi-eye-plus-outline</v-icon>
+                                 </v-btn>
+                              </template>
+                              <bike-report></bike-report>
+                            </v-dialog>
+                        </v-card-actions></v-card-title>
+                        <v-card-subtitle>{{ bike.robbery_date}}</v-card-subtitle>
+                      </v-card>
                     </template>
                     <bike-alert
                       :bike-id="bike.pk"

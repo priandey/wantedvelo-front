@@ -47,6 +47,9 @@
                 lon: coords.lon
               });
             })
+              .then(coords => {
+                this.$emit("userLocated", coords)
+              })
           },
       },
     }
