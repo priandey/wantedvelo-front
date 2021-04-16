@@ -61,7 +61,6 @@
         },
         watch: {
           centerPoint () {
-            console.log("changed");
             this.$fetch()
           },
         },
