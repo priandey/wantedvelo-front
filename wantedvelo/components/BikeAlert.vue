@@ -25,6 +25,7 @@
     </v-card-title>
     <v-card-subtitle>Disparu le : {{bike.date_of_robbery}} <nuxt-link :to="{name: 'alert-id', params:{id:bikeId}}">Lien direct</nuxt-link></v-card-subtitle>
       <template v-if="!inModal">
+        <v-img>
       <div id="map-wrap" style="height: 30vh">
         <l-map :zoom=10 :center="latLng">
           <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
@@ -33,6 +34,7 @@
           </l-marker>
         </l-map>
       </div>
+        </v-img>
       </template>
     </v-container>
   </v-card>
@@ -62,6 +64,20 @@
       computed:{
         latLng() {
           return [this.bike.robbed_location.latitude, this.bike.robbed_location.longitude]
+        },
+        dialogWidth() {
+          switch (this.$vuetify.breakpoint.name) {
+            case 'xs':
+              return "80vw";
+            case 'sm':
+              return "80vw";
+            case 'md':
+              return "50vw";
+            case 'lg':
+              return "50vw";
+            case 'xl':
+              return "50vw"
+          }
         },
       }
     }

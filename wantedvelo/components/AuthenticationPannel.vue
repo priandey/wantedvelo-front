@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO : Redo all this crap it's ugly -->
   <v-bottom-sheet
     v-model="sheet"
     inset

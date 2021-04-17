@@ -8,17 +8,40 @@
         :key="bike.pk">
           <v-expansion-panel-header>
             {{ bike.name }}
-          </v-expansion-panel-header>
+          </v-expansion-panel-header> <!-- TODO : Add report and add Markers accordingly -->
           <v-expansion-panel-content>
-              <v-container>
-                <v-row>
-                  <v-col cols="6"><h2>Reference : {{bike.reference}}</h2></v-col>
-                  <v-col cols="6"><v-chip v-for="trait in bike.traits">{{ trait }}</v-chip></v-col>
-                </v-row>
-                <v-row justify="center">
-                  <v-col cols="6"><v-img :src="bike.picture"></v-img></v-col>
-                </v-row>
-              </v-container>
+              <v-card elevation="0">
+                <v-card-title>Référence : {{ bike.reference }}</v-card-title>
+                <v-card-subtitle><v-chip v-for="trait in bike.traits" :key="trait">{{ trait }}</v-chip></v-card-subtitle>
+                <v-img :src="bike.picture" max-width="450"></v-img>
+                <template v-if="bike.alerts.length > 0">
+                  <v-card-title>Votre vélo a été vu !</v-card-title>
+                  <v-card-text>
+                    <v-expansion-panels>
+                      <v-expansion-panel v-for="alert in bike.alerts" :key="alert.date">
+                        <v-expansion-panel-header>Vu le {{ alert.date }}</v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                          <strong>Message de l'utilisateur :</strong> {{ alert.message }}
+                          <v-img> <!-- TODO: Leaflet loading only one tile on mount -->
+                            <div id="map-wrap" style="height: 40vh">
+                              <l-map :zoom=15 :center="[alert.coords.lat, alert.coords.lon]">
+                                <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
+                                <l-marker :lat-lng="[alert.coords.lat, alert.coords.lon]">
+                                  <l-tooltip>Votre vélo a été vu ici !</l-tooltip>
+                                </l-marker>
+                              </l-map>
+                            </div>
+                          </v-img>
+                        </v-expansion-panel-content>
+                      </v-expansion-panel>
+                    </v-expansion-panels>
+                  </v-card-text>
+                </template>
+                <template v-else>
+                  <v-card-title>Votre vélo n'a été repéré par personne...pour le moment !</v-card-title>
+                </template>
+              </v-card>
+
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
