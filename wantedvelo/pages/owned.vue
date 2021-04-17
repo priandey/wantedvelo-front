@@ -13,7 +13,7 @@
               <v-container>
                 <v-row>
                   <v-col cols="6"><h2>Reference : {{bike.reference}}</h2></v-col>
-                  <v-col cols="6"><v-combobox disabled label="Caractéristiques" chips v-model="bike.traits" item-text="item.name"><v-chip>test</v-chip></v-combobox></v-col>
+                  <v-col cols="6"><v-chip v-for="trait in bike.traits">{{ trait }}</v-chip></v-col>
                 </v-row>
                 <v-row justify="center">
                   <v-col cols="6"><v-img :src="bike.picture"></v-img></v-col>

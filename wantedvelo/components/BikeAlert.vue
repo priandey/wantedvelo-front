@@ -5,7 +5,24 @@
     :src="bike.picture"
     max-height="50vh"
     contain></v-img>
-    <v-card-title>Référence : {{bike.reference}}</v-card-title>
+    <v-card-title>Référence : {{bike.reference}}
+      <v-card-actions>
+        <v-dialog
+          :width="dialogWidth">
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              color="primary"
+              dark
+              medium
+              v-on="on"
+            >
+              <v-icon large>mdi-eye-plus-outline</v-icon>
+            </v-btn>
+          </template>
+          <bike-report :bikeId="bike.pk"></bike-report>
+        </v-dialog>
+      </v-card-actions>
+    </v-card-title>
     <v-card-subtitle>Disparu le : {{bike.date_of_robbery}} <nuxt-link :to="{name: 'alert-id', params:{id:bikeId}}">Lien direct</nuxt-link></v-card-subtitle>
       <template v-if="!inModal">
       <div id="map-wrap" style="height: 30vh">

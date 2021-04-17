@@ -22,6 +22,7 @@
                         v-bind:src="bike.picture"
                         gradient="rgba(0,0,0,.5), rgba(0,0,0,.23)"
                         max-height="160"
+                        min-height="66%"
                         >
                         </v-img>
                         <v-card-title>
@@ -42,7 +43,7 @@
                                     <v-icon large>mdi-eye-plus-outline</v-icon>
                                  </v-btn>
                               </template>
-                              <bike-report></bike-report>
+                              <bike-report :bikeId="bike.pk"></bike-report>
                             </v-dialog>
                         </v-card-actions></v-card-title>
                         <v-card-subtitle>{{ bike.robbery_date}}</v-card-subtitle>
