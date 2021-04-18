@@ -5,7 +5,8 @@
                 <v-col
                 v-for="bike in this.bikes"
                 :key="bike.pk"
-                lg="2"
+                xl="2"
+                lg="3"
                 md="4"
                 sm="6"
                 cols="12"
