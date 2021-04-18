@@ -57,7 +57,8 @@
             </v-col>
         </v-row>
           <v-row>
-            <v-col><v-progress-linear indeterminate v-intersect="infiniteScroll"></v-progress-linear></v-col>
+            <v-col cols="12"><v-btn @click="$fetch">Load More</v-btn></v-col>
+            <v-col cols="12"><v-progress-linear indeterminate v-intersect="infiniteScroll"></v-progress-linear></v-col>
           </v-row>
     </v-container>
       <v-btn
@@ -84,7 +85,7 @@
           bikes: "/bikes/"
         },
         bikes: [],
-        bikeCount: 18,
+        bikeCount: 24,
         bikeOffset: 0,
         showModal: false,
       }
@@ -93,31 +94,11 @@
       refresh() {
         this.bikes = [];
         this.bikeOffset = 0;
-        this.get_bikes(this.bikeCount, this.bikeOffset);
-        this.bikeOffset += 18;
-      },
-      get_bikes (itemcount, itemOffset) {
-        this.$axios.get('', {
-          params: {
-            'limit': itemcount,
-            'offset': itemOffset,
-          }
-        })
-          .then(response => {
-            response.data.results.forEach(bike => {
-              this.bikes.push({
-                picture: bike.picture,
-                pk: bike.pk,
-                reference: bike.reference,
-                robbery_date: bike.date_of_robbery
-              })
-            })
-          })
+        this.$fetch();
       },
       infiniteScroll (entries, observer, isIntersecting) {
         if (isIntersecting) {
-            this.get_bikes(this.bikeCount, this.bikeOffset);
-            this.bikeOffset += 18;
+            this.$fetch();
         }
       },
       addBike(){
@@ -126,6 +107,25 @@
         }
         this.$store.commit('openBikePannel');
       },
+    },
+    async fetch() {
+      await this.$axios.get('', {
+        params: {
+          'limit': this.bikeCount,
+          'offset': this.bikeOffset,
+        }
+      })
+        .then(response => {
+          response.data.results.forEach(bike => {
+            this.bikes.push({
+              picture: bike.picture,
+              pk: bike.pk,
+              reference: bike.reference,
+              robbery_date: bike.date_of_robbery
+            })
+          });
+          this.bikeOffset += this.bikeCount
+        })
     },
     computed: {
       dialogWidth() {
