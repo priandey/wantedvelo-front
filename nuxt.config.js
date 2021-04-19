@@ -42,7 +42,7 @@ export default {
   ],
 
   axios: {
-    baseURL: 'http://127.0.0.1:8000', // Used as fallback if no runtime config is provided
+    baseURL: process.env.BASE_URL || 'http://127.0.0.1:8000', // Used as fallback if no runtime config is provided
   },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
