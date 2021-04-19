@@ -55,7 +55,7 @@
         }
       },
       async fetch() {
-        await this.$axios.get('/bike/'+this.bikeId)
+        await this.$axios.get('/bike/'+this.bikeId+'/')
           .then(response => {
             this.bike = response.data;
           })
