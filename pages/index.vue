@@ -57,7 +57,7 @@
 
             </v-col>
         </v-row>
-          <v-row>
+          <v-row v-if="bikes.length >= 24">
             <v-col cols="12"><v-btn @click="$fetch">Load More</v-btn></v-col>
             <v-col cols="12"><v-progress-linear indeterminate v-intersect="infiniteScroll"></v-progress-linear></v-col>
           </v-row>
