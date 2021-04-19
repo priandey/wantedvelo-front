@@ -128,6 +128,9 @@
           this.bikeOffset += this.bikeCount
         })
     },
+    mounted() {
+      this.$fetch()
+    },
     computed: {
       dialogWidth() {
         switch (this.$vuetify.breakpoint.name) {
