@@ -1,16 +1,11 @@
 <template>
     <!-- Todo: selected should unselect when erasing content-->
-  <v-card
-    color="secondary"
-    dark
-  >
-    <v-card-text>
       <v-autocomplete
         v-model="model"
         :items="items"
         :loading="isLoading"
         :search-input.sync="search"
-        color="white"
+        color="primary"
         hide-no-data
         hide-selected
         :filter="customFilter"
@@ -21,8 +16,7 @@
         prepend-icon="mdi-magnify"
         return-object
       ></v-autocomplete>
-    </v-card-text>
-  </v-card>
+
 </template>
 
 <script>

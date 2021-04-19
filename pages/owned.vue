@@ -18,7 +18,7 @@
                   <v-card-title>Votre vélo a été vu !</v-card-title>
                   <v-card-text>
                     <v-expansion-panels>
-                      <v-expansion-panel v-for="alert in bike.alerts" :key="alert.date">
+                      <v-expansion-panel v-for="alert in bike.alerts" :key="alert.date" @click="debugLeaflet">
                         <v-expansion-panel-header>Vu le {{ alert.date }}</v-expansion-panel-header>
                         <v-expansion-panel-content>
                           <strong>Message de l'utilisateur :</strong> {{ alert.message }}
@@ -45,6 +45,20 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
+      <template v-if="noBike">
+        <v-card>
+          <v-card-title>Vous n'avez pas déclaré de vol de vélo !</v-card-title>
+          <v-card-subtitle>Quelle chance !</v-card-subtitle>
+          <v-card-actions>
+            <v-btn
+            color="primary"
+            @click="$store.commit('openBikePannel')">
+              Malheureusement, j'aimerais déclarer un vol...
+            </v-btn>
+          </v-card-actions>
+          <new-bike @creationEnded="$fetch"></new-bike>
+        </v-card>
+      </template>
     </template>
     <template v-else>
       <h1>Vous devez vous identifier pour accèder à vos vélos !</h1>
@@ -65,6 +79,9 @@
       computed: {
         isAuthenticated() {
           return this.$store.state.auth.isAuthenticated
+        },
+        noBike() {
+          return this.bikes === null || this.bikes.length < 1
         }
       },
 
@@ -80,6 +97,11 @@
       methods: {
         openAuthPannel() {
           this.$store.commit('openAuthPannel');
+        },
+
+        debugLeaflet() {
+          // Resolving Leaflet map not working well with webpack
+          setTimeout(function() { window.dispatchEvent(new Event('resize')) }, 250);
         }
       },
       async fetch() {

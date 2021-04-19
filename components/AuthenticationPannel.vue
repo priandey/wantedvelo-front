@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO : Redo all this crap it's ugly -->
   <v-bottom-sheet
     v-model="sheet"
     inset
@@ -103,7 +102,6 @@
           step: 1,
           loading:false
         },
-        activate:false,
         // API Endpoints below
         send_mail_ep: "pwl/auth/email/",
         send_token_ep: "pwl/auth/token/",
@@ -222,12 +220,4 @@
   };
 </script>
 <style scoped>
-  .bottomSheet {
-    background-color : var(--v-primary-base);
-  }
-
-  .loginForm {
-    margin-right: 10%;
-    margin-left: 10%;
-  }
 </style>

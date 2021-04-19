@@ -11,7 +11,9 @@
 
       <v-btn
         icon
-        @click="logout">
+        @click="logout"
+        v-if="$store.state.auth.isAuthenticated"
+        title="Déconnexion">
         <v-icon>mdi-logout-variant</v-icon>
       </v-btn>
 
