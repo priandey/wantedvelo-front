@@ -14,6 +14,25 @@
                 <v-card-title>Référence : {{ bike.reference }}</v-card-title>
                 <v-card-subtitle><v-chip v-for="trait in bike.traits" :key="trait">{{ trait }}</v-chip></v-card-subtitle>
                 <v-img :src="bike.picture" max-width="450"></v-img>
+
+                <v-card-actions>
+                  <v-dialog
+                  hide-overlay
+                  max-width="250"
+                  v-model="confirmDialog">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn v-on="on">J'ai retrouvé mon vélo !</v-btn>
+                    </template>
+                    <v-card>
+                      <v-card-text class="py-2">Quelle bonne nouvelle ! Merci de la confirmer</v-card-text>
+                      <v-card-actions class="pt-0">
+                        <v-btn @click="removeBike(bike.pk)" color="primary">Confirmer</v-btn>
+                        <v-btn @click="confirmDialog = false">Annuler</v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-card-actions>
+
                 <template v-if="bike.alerts.length > 0">
                   <v-card-title>Votre vélo a été vu !</v-card-title>
                   <v-card-text>
@@ -53,7 +72,7 @@
             <v-btn
             color="primary"
             @click="$store.commit('openBikePannel')">
-              Malheureusement, j'aimerais déclarer un vol...
+              Je souhaite déclarer un vol
             </v-btn>
           </v-card-actions>
           <new-bike @creationEnded="$fetch"></new-bike>
@@ -73,6 +92,7 @@
       data () {
           return {
             bikes:null,
+            confirmDialog:false,
           }
       },
 
@@ -102,6 +122,13 @@
         debugLeaflet() {
           // Resolving Leaflet map not working well with webpack
           setTimeout(function() { window.dispatchEvent(new Event('resize')) }, 250);
+        },
+
+        removeBike(id) {
+          this.$axios.patch("bike/"+id+"/", {robbed:false})
+            .then(response => {
+              this.$fetch()
+            })
         }
       },
       async fetch() {

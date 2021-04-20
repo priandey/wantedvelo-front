@@ -7,8 +7,8 @@ export const state = () => ({
   addBikePannel: false,
   localisation: {
     point: {
-      lat:43,
-      lon: 54,
+      lat: 48.92313275913779,
+      lon: 2.2521972656250004,
     },
   },
 })
