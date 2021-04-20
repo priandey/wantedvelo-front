@@ -2,11 +2,12 @@
   <!-- TODO : 2-time information. First with info and picture, second with traits -->
     <v-bottom-sheet
     v-model="openPannel"
-    inset
+    fullscreen
     transition="slide-x-transition"
-    overlay-opacity="0.9"
-    persistent>
+    persistent
+    scrollable>
       <v-card>
+        <v-card-text height="100vh">
       <v-progress-linear
       v-if="isLoading"
       indeterminate></v-progress-linear>
@@ -45,33 +46,33 @@
 
       <search-create-traits
       @updateTraitsList="updateTraits"></search-create-traits>
-
-        <v-card-actions>
+        <v-card-subtitle>Où votre vélo a-t-il disparu : </v-card-subtitle>
           <locate-user
             auto-locate
             hide
             v-if="location.autoLocate"
             @userLocated="setPoint([$store.state.localisation.point.lat, $store.state.localisation.point.lon])"></locate-user>
-          <v-card-subtitle>Où votre vélo a-t-il disparu : </v-card-subtitle>
-          <v-btn text outlined @click="location.autoLocate = true">Localiser ici</v-btn>/
+          <v-btn text outlined rounded @click="location.autoLocate = true">Localiser ici</v-btn>/
           <v-dialog
           v-model="location.dialog">
             <template v-slot:activator="{ on, attrs }">
-              <v-btn text outlined v-on="on">Localiser ailleurs</v-btn>
+              <v-btn text outlined rounded v-on="on">Localiser ailleurs</v-btn>
             </template>
             <SelectLocation @confirm="setPoint([$event.lat, $event.lng])"></SelectLocation>
           </v-dialog>
-        </v-card-actions>
         <v-card-subtitle v-if="location.isLocated">Une localisation a été enregistrée (vous pouvez en changer)</v-card-subtitle>
 
+      <v-card-actions>
       <v-btn
       @click="submit"
       :disabled="!readyToSubmit">Enregistrer mon vélo</v-btn>
+      </v-card-actions>
       </v-container>
       <v-container v-if="!isLoading && isSent">
         <v-card-title><v-icon color="primary">mdi-check</v-icon>Votre vélo a bien été enregistré comme volé</v-card-title>
       </v-container>
         <v-card-actions><v-btn @click="endCreation">Fermer</v-btn></v-card-actions>
+        </v-card-text>
       </v-card>
     </v-bottom-sheet>
 </template>

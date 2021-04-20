@@ -5,10 +5,8 @@
       prepend-icon="mdi-bicycle"
       v-model="select"
       :items="items"
-      chips
+      dense
       hide-selected
-      deletable-chips
-      clearable
       multiple
       hide-no-data
       menu-props="top"
