@@ -6,14 +6,12 @@
     transition="slide-x-transition"
     overlay-opacity="0.9"
     persistent>
-      <locate-user
-        auto-locate
-        hide></locate-user>
       <v-card>
       <v-progress-linear
       v-if="isLoading"
       indeterminate></v-progress-linear>
       <v-container v-if="!isLoading && !isSent">
+
       <v-form v-model="isValid">
         <v-text-field
           v-model="bike.name"
@@ -44,11 +42,31 @@
             show-size
           ></v-file-input>
       </v-form>
+
       <search-create-traits
       @updateTraitsList="updateTraits"></search-create-traits>
+
+        <v-card-actions>
+          <locate-user
+            auto-locate
+            hide
+            v-if="location.autoLocate"
+            @userLocated="setPoint([$store.state.localisation.point.lat, $store.state.localisation.point.lon])"></locate-user>
+          <v-card-subtitle>Où votre vélo a-t-il disparu : </v-card-subtitle>
+          <v-btn text outlined @click="location.autoLocate = true">Localiser ici</v-btn>/
+          <v-dialog
+          v-model="location.dialog">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn text outlined v-on="on">Localiser ailleurs</v-btn>
+            </template>
+            <SelectLocation @confirm="setPoint([$event.lat, $event.lng])"></SelectLocation>
+          </v-dialog>
+        </v-card-actions>
+        <v-card-subtitle v-if="location.isLocated">Une localisation a été enregistrée (vous pouvez en changer)</v-card-subtitle>
+
       <v-btn
       @click="submit"
-      :disabled="!isValid">Enregistrer mon vélo</v-btn>
+      :disabled="!readyToSubmit">Enregistrer mon vélo</v-btn>
       </v-container>
       <v-container v-if="!isLoading && isSent">
         <v-card-title><v-icon color="primary">mdi-check</v-icon>Votre vélo a bien été enregistré comme volé</v-card-title>
@@ -69,13 +87,23 @@
             set () {
               this.$store.commit('closeBikePannel')
             }
-          }
+          },
+          readyToSubmit() {
+            return this.isValid && this.location.isLocated
+          },
         },
         data () {
           return {
             isValid:false,
             isLoading:false,
             isSent:false,
+            location: {
+              autoLocate: false,
+              dialog:false,
+              isLocated: false,
+              lat:null,
+              lon:null,
+            },
             bike: {
               name: null,
               reference: null,
@@ -95,12 +123,21 @@
         },
 
       methods: {
+          setPoint(coords) {
+            if (coords != null) {
+              this.location.lat = coords[0];
+              this.location.lon = coords[1];
+              this.location.isLocated = true;
+            }
+            this.location.dialog = false;
+            this.location.autoLocate = false
+          },
           submit() {
             if (this.isValid) {
               var form_data = new FormData();
               form_data.append('robbed_location', JSON.stringify({
-                latitude: this.$store.state.localisation.point.lat,
-                longitude: this.$store.state.localisation.point.lon
+                latitude: this.location.lat,
+                longitude: this.location.lon
               }));
               form_data.append('name', this.bike.name);
               form_data.append('robbed', this.bike.robbed);
