@@ -27,18 +27,27 @@
           <v-tabs-slider color="yellow"></v-tabs-slider>
 
           <v-tab
-          to="/">
-            Derniers avis de recherche
+          to="/"
+          @change="updateActiveTab(1)">
+            <v-icon>mdi-timeline-clock-outline</v-icon>
+            <span v-if="activeTab === 1" class="ml-2">Derniers vélos</span>
           </v-tab>
+
           <v-tab
-          to="/near">
-              <v-icon>mdi-crosshairs-gps</v-icon>
+          to="/near"
+          @change="updateActiveTab(2)">
+             <v-icon>mdi-crosshairs-gps</v-icon>
+            <span v-if="activeTab === 2" class="ml-2">A proximité</span>
           </v-tab>
+
           <v-tab
           to="/owned"
+          @change="updateActiveTab(3)"
           @click="verifyAuth">
-            Mes vélos
+            <v-icon>mdi-bicycle</v-icon>
+            <span v-if="activeTab === 3" class="ml-2">Mes vélos</span>
           </v-tab>
+
         </v-tabs>
       </template>
     </v-toolbar>
@@ -51,6 +60,11 @@
 
 <script>
   export default {
+    data() {
+      return {
+        activeTab:null
+      }
+    },
     methods: {
       logout () {
         this.$store.commit("resetAuth");
@@ -59,6 +73,9 @@
         if (!this.$store.state.auth.isAuthenticated) {
           this.$store.commit('openAuthPannel')
         }
+      },
+      updateActiveTab(tabNumber) {
+        this.activeTab = tabNumber
       }
     }
   }
