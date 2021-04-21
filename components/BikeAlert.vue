@@ -5,7 +5,7 @@
     :src="bike.picture"
     max-height="50vh"
     contain></v-img>
-      <v-chip class="mr-1" v-for="trait in bike.traits" :key="trait.name">{{ trait.name }}</v-chip>
+      <v-chip class="mr-1 mt-3" v-for="trait in bike.traits" :key="trait.name">{{ trait.name }}</v-chip>
     <v-card-title>Référence : {{bike.reference}}
       <v-card-actions>
         <v-dialog
@@ -24,7 +24,8 @@
         </v-dialog>
       </v-card-actions>
     </v-card-title>
-    <v-card-subtitle>Disparu le : {{bike.date_of_robbery}} <nuxt-link :to="{name: 'alert-id', params:{id:bikeId}}">Lien direct</nuxt-link></v-card-subtitle>
+    <v-card-subtitle>Disparu le : {{bike.date_of_robbery}} <span v-if="bike.robbery_city">à {{bike.robbery_city}}</span>
+      <nuxt-link :to="{name: 'alert-id', params:{id:bikeId}}">Lien direct</nuxt-link></v-card-subtitle>
       <template v-if="!inModal">
         <v-img>
       <div id="map-wrap" style="height: 30vh">
