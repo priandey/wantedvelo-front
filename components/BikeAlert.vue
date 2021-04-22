@@ -63,6 +63,10 @@
           })
       },
 
+      mounted() {
+        this.$fetch()
+      },
+
       computed:{
         latLng() {
           return [this.bike.robbed_location.latitude, this.bike.robbed_location.longitude]
