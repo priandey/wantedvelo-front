@@ -5,7 +5,7 @@
     :src="bike.picture"
     max-height="50vh"
     contain></v-img>
-      <v-chip class="mr-1 mt-3" v-for="trait in bike.traits" :key="trait.name">{{ trait.name }}</v-chip>
+      <v-chip class="mr-1 mt-3" v-for="trait in bike.traits" :key="trait">{{ trait }}</v-chip>
     <v-card-title>Référence : {{bike.reference}}
       <v-card-actions>
         <v-dialog

@@ -33,15 +33,7 @@
           hint="Bicycode, numéro de série du cadre, etc."
           prepend-icon="mdi-barcode"
         ></v-text-field>
-          <v-file-input
-            v-model="bike.file"
-            :rules="imageRules"
-            accept="image/png, image/jpeg, image/bmp"
-            placeholder="Choisissez une image de votre vélo"
-            prepend-icon="mdi-camera"
-            label="Image"
-            show-size
-          ></v-file-input>
+          <image-compressor @compressed="setFile($event)"></image-compressor>
       </v-form>
 
       <search-create-traits
@@ -112,10 +104,6 @@
               robbed:true,
             },
             traits: [],
-            imageRules: [
-              v => !!v || 'Une image est requise',
-              v => (v && v.size < 2000000) || 'Votre image est trop lourde (2MB max)',
-            ],
             textRules: [
               v => !!v || 'Ce champ doit être rempli',
               v => (v && v.length > 0) || 'Ce champ doit être rempli',
@@ -133,6 +121,9 @@
             this.location.dialog = false;
             this.location.autoLocate = false
           },
+          setFile(e) {
+            this.bike.file = e;
+          },
           submit() {
             if (this.isValid) {
               var form_data = new FormData();
@@ -143,7 +134,7 @@
               form_data.append('name', this.bike.name);
               form_data.append('robbed', this.bike.robbed);
               form_data.append('reference', this.bike.reference);
-              form_data.append('picture', this.bike.file);
+              form_data.append('picture', this.bike.file, this.bike.file.name);
               this.isLoading = true;
 
               this.$axios.post('/', form_data, {
