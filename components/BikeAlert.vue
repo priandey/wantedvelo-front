@@ -50,8 +50,8 @@
         return {
           bike: {
             robbed_location: {
-              latitude:'43',
-              longitude:'45',
+              latitude:'48.85387273165656',
+              longitude:'2.3497009277343754',
             }
           },
         }

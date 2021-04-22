@@ -65,8 +65,8 @@
             coords.lon = position.coords.longitude;
             resolve(coords);
           }, () => resolve({
-            lat:48.852969,
-            lon:2.349903,
+            lat:48.852969123136674,
+            lon:2.3497009277343754,
           }))
         } else {
           reject(new Error("Failed to geolocate"));
