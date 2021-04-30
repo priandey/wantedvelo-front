@@ -125,9 +125,9 @@
       }
     },
     mounted () {
-      if (storageAvailable('sessionStorage')) {
-        if (sessionStorage.getItem('authToken')) {
-          let authToken = sessionStorage.getItem('authToken');
+      if (storageAvailable('localStorage')) {
+        if (localStorage.getItem('authToken')) {
+          let authToken = localStorage.getItem('authToken');
           this.verify_auth_token(authToken);
         }
       } else {
@@ -161,7 +161,7 @@
           .then(response => {
             if (response.status === 200) {
               this.stepper.loading = false;
-              sessionStorage.setItem('authToken', response.data.token);
+              localStorage.setItem('authToken', response.data.token);
               this.credentials.loginToken = '';
               this.$store.commit('authenticate');
               this.$axios.setToken(response.data.token, 'Token');
