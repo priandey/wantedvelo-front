@@ -3,9 +3,10 @@
         <v-card>
     <v-toolbar
       color="primary"
-      flat
     >
-      <v-toolbar-title>WantedVelo</v-toolbar-title>
+      <v-toolbar-title><span class="heading">WantedVelo</span>
+      <div class="subheading">Un outil collaboratif de recherche de vélos volés</div></v-toolbar-title>
+
 
       <v-spacer></v-spacer>
 
@@ -85,5 +86,13 @@
 .active-tab {
     color: rgba(255, 145, 0, 0.9); // orange accent 3
 }
+
+  .subheading {
+    font-size: small;
+  }
+
+  .heading {
+    font-weight: bold;
+  }
 
 </style>
