@@ -9,7 +9,7 @@
       hide-selected
       multiple
       hide-no-data
-      menu-props="top"
+      :menu-props="{top:true, maxHeight:'200px'}"
       @change="updateTraits"
     ></v-combobox>
 </template>
