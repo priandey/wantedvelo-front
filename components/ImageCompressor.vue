@@ -36,6 +36,9 @@
               this.file = result;
               this.$emit("compressed", this.file)
             })
+              .catch(error => {
+                window.alert("Une erreur s'est produite : " + error);
+              })
           }
         }
       }
