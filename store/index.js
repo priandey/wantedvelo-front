@@ -21,7 +21,7 @@ export const mutations = {
   },
 
   resetAuth(state) {
-    sessionStorage.removeItem('authToken');
+    localStorage.removeItem('authToken');
     this.$axios.setToken(false);
     state.auth.isAuthenticated = false;
     state.auth.authToken = false;
