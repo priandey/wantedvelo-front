@@ -1,5 +1,4 @@
 <template>
-  <!-- TODO : 2-time information. First with info and picture, second with traits -->
     <v-bottom-sheet
     v-model="openPannel"
     fullscreen

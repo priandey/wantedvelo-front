@@ -103,8 +103,6 @@
               this.reportErrored = true;
               this.errorMessage = e
             })
-
-          // TODO : Actually send the report
         }
       }
     }
