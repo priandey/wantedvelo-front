@@ -12,7 +12,8 @@
       hide-selected
       multiple
       hide-no-data
-      :menu-props="{top:true, maxHeight:'150px'}"
+      :menu-props="menuprops"
+      deletable-chips
       @change="updateTraits($event)"
     ></v-combobox>
 </template>
@@ -28,6 +29,12 @@
         chips: {
           default:false,
           type: Boolean,
+        },
+        menuprops: {
+            default:function() {
+              return {top:true, maxHeight:'150px'}
+              },
+            type: Object
         }
       },
       data() {
@@ -59,6 +66,11 @@
               })
             })
             .finally(() => (this.isLoading = false))
+        },
+        select (val) {
+          if (val.length === 0) {
+            this.$emit('selectionEmpty')
+          }
         },
       },
       computed: {
