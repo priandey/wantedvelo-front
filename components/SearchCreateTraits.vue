@@ -54,7 +54,6 @@
           })
             .then(response => response.data.results)
             .then(response => {
-              console.log(response);
               response.forEach(item => {
                 this.items.push(item.name)
               })
@@ -68,25 +67,37 @@
         },
       },
       methods: {
-          updateTraits(traits) {
-            if (this.createIfNone) {
-              if (traits.length > 0) {
-                let newItem = traits[traits.length-1];
-                this.$axios.get('/traits/', {
-                  params: {
-                    qs:newItem
-                  }
-                })
-                  .then(response => response.data.results)
-                  .then(response => {
-                    if (response.length === 0) {
-                      this.$axios.post('/traits/', {name:newItem})
-                    }
-                  })
+          async updateTraits(traits) {
+            if (traits.length > 0) {
+              let newItem = traits[traits.length-1];
+              let exist = await this.traitExist(newItem);
+              if (!exist) {
+                if (this.createIfNone) {
+                  this.$axios.post('/traits/', {name:newItem})
+                } else {
+                  traits.splice(traits.length-1, 1)
+                }
               }
               this.$emit('updateTraitsList', this.select)
             }
           },
+         async traitExist(trait) {
+            return new Promise((resolve, reject) => {
+              this.$axios.get('/traits/', {
+                params: {
+                  qs: trait
+                }
+              })
+                .then(response => response.data.results)
+                .then(response => {
+                  if (response.length > 0) {
+                    resolve(true)
+                  } else {
+                    resolve(false)
+                  }
+                })
+            })
+        }
       },
     }
 </script>
