@@ -2,7 +2,7 @@
     <v-combobox
       label="Entrez une caractéristique"
       placeholder="Une marque, une couleur, un type de vélo, etc."
-      prepend-icon="mdi-bicycle"
+      :prepend-icon="icon"
       v-model="select"
       :items="items"
       :loading="isLoading"
@@ -35,6 +35,10 @@
               return {top:true, maxHeight:'150px'}
               },
             type: Object
+        },
+        icon: {
+          default:'mdi-bicycle',
+          type: String
         }
       },
       data() {

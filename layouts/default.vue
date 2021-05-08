@@ -7,16 +7,37 @@
       <v-toolbar-title><span class="heading">WantedVelo</span>
       <div class="subheading">Retrouvons les vélos volés</div></v-toolbar-title>
 
-
       <v-spacer></v-spacer>
 
-      <v-btn
-        icon
-        @click="logout"
-        v-if="$store.state.auth.isAuthenticated"
-        title="Déconnexion">
-        <v-icon>mdi-logout-variant</v-icon>
-      </v-btn>
+      <v-tooltip left>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            @click="logout"
+            v-if="$store.state.auth.isAuthenticated"
+            title="Déconnexion"
+            v-on="on">
+            <v-icon>mdi-logout-variant</v-icon>
+          </v-btn>
+        </template>
+        <span>Déconnexion</span>
+      </v-tooltip>
+
+      <v-tooltip left>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            icon
+            title="Déclarer un bug"
+            v-on="on"
+            href="http://wantedbugs.priandey.eu"
+            target="_blank">
+            <v-icon>mdi-alert-circle</v-icon>
+          </v-btn>
+        </template>
+        <span>Déclarer un bug ou suggérer une amélioration</span>
+      </v-tooltip>
+
+
 
       <template v-slot:extension v-tabs>
         <v-tabs

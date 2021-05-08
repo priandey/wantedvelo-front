@@ -10,15 +10,20 @@
       <v-card-actions>
         <v-dialog
           :width="dialogWidth">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              color="primary"
-              dark
-              medium
-              v-on="on"
-            >
-              <v-icon large>mdi-eye-plus-outline</v-icon>
-            </v-btn>
+          <template v-slot:activator="{ on:dialog, attrs }">
+            <v-tooltip top>
+              <template v-slot:activator="{on:tooltip}">
+                <v-btn
+                  color="primary"
+                  dark
+                  medium
+                  v-on="{...dialog, ...tooltip}"
+                >
+                  <v-icon large>mdi-eye-plus-outline</v-icon>
+                </v-btn>
+                  </template>
+              <span>J'ai vu ce vélo !</span>
+            </v-tooltip>
           </template>
           <bike-report :bikeId="bike.pk"></bike-report>
         </v-dialog>

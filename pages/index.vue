@@ -7,7 +7,8 @@
               :create-if-none="false"
               :chips="true"
               @updateTraitsList="updateFiltering($event)"
-              @selectionEmpty="refresh"></SearchCreateTraits>
+              @selectionEmpty="refresh"
+              icon="mdi-magnify"></SearchCreateTraits>
           </v-row>
             <v-row>
                 <v-col
@@ -39,7 +40,9 @@
                           <v-card-actions>
                             <v-dialog
                             :width="dialogWidth">
-                              <template v-slot:activator="{ on, attrs }">
+                              <template v-slot:activator="{ on:dialog, attrs}">
+                                <v-tooltip top>
+                                  <template v-slot:activator="{on:tooltip, attrs}">
                                 <v-btn
                                 color="primary"
                                 dark
@@ -47,10 +50,13 @@
                                 absolute
                                 center
                                 right
-                                v-on="on"
+                                v-on="{...tooltip, ...dialog}"
                                 >
                                     <v-icon large>mdi-eye-plus-outline</v-icon>
                                  </v-btn>
+                                  </template>
+                                  <span>J'ai vu ce vélo !</span>
+                                </v-tooltip>
                               </template>
                               <bike-report :bikeId="bike.pk"></bike-report>
                             </v-dialog>
@@ -70,17 +76,23 @@
             <v-col cols="12"><v-progress-linear indeterminate v-intersect="infiniteScroll"></v-progress-linear></v-col>
           </v-row>
     </v-container>
-      <v-btn
-        color="primary"
-        large
-        fixed
-        bottom
-        :style="{left: '50%', transform:'translateX(-50%)'}"
-        fab
-        @click="addBike"
-      >
-        <v-icon>mdi-plus</v-icon>
-      </v-btn>
+      <v-tooltip top>
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            color="primary"
+            large
+            fixed
+            bottom
+            :style="{left: '50%', transform:'translateX(-50%)'}"
+            fab
+            @click="addBike"
+            v-on="on"
+          >
+            <v-icon>mdi-alert-plus</v-icon>
+          </v-btn>
+        </template>
+        <span>Mon vélo a disparu !</span>
+      </v-tooltip>
       <new-bike @creationEnded="refresh"></new-bike>
 </v-main>
 </template>

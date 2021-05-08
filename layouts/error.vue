@@ -5,6 +5,7 @@
     </h1>
     <h1 v-else>
       {{ otherError }}
+      <p>Merci de nous en faire part en <a href="http://wantedbugs.priandey.eu">suivant ce lien</a></p>
     </h1>
     <NuxtLink to="/">
       Home page
@@ -24,7 +25,7 @@ export default {
   data () {
     return {
       pageNotFound: '404 Not Found',
-      otherError: 'An error occurred'
+      otherError: "Une erreur s'est produite !"
     }
   },
   head () {
