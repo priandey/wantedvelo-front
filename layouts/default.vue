@@ -5,7 +5,7 @@
       color="primary"
     >
       <v-toolbar-title><span class="heading">WantedVelo</span>
-      <div class="subheading">Un outil collaboratif de recherche de vélos volés</div></v-toolbar-title>
+      <div class="subheading">Retrouvons les vélos volés</div></v-toolbar-title>
 
 
       <v-spacer></v-spacer>
