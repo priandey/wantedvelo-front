@@ -35,11 +35,23 @@ export default {
     '@nuxtjs/vuetify',
   ],
 
+  serverMiddleware: [
+    { path: '/api/check-token', handler: '~/api/recaptcha' }
+  ],
+
+
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
       '@nuxtjs/axios',
       'nuxt-leaflet',
+      '@nuxtjs/recaptcha'
   ],
+
+  recaptcha: {
+    hideBadge: false, // Hide badge element (v3 & v2 via size=invisible)
+    siteKey: process.env.RECAPTCHA_SITE_KEY,    // Site key for requests
+    version: 3,     // Version
+  },
 
   axios: {
     baseURL: process.env.BASE_URL || 'http://127.0.0.1:8000', // Used as fallback if no runtime config is provided
