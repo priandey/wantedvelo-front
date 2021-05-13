@@ -76,6 +76,15 @@
           return this.located && this.message.length > 0;
         },
       },
+
+      async mounted() {
+        try {
+          await this.$recaptcha.init()
+        } catch (e) {
+          console.log(e);
+        }
+      },
+
       methods: {
         askLocation() {
           this.askedLocation = true
@@ -90,19 +99,35 @@
           this.coords.lon = e.lng;
           this.located = true
         },
-        sendReport(){
+        async sendReport(){
           let report = {
             message: this.message,
             coords: this.coords
           };
-          this.$axios.post('/bike/' + this.bikeId + '/found/', report)
-            .then(response => {
-              this.reportSent = true
+          try {
+            const token = await this.$recaptcha.execute('login');
+            const response = await fetch('/api/check-token', {
+              method: 'POST',
+              body: JSON.stringify({
+                token,
+              })
             })
-            .catch(e => {
-              this.reportErrored = true;
-              this.errorMessage = e
-            })
+              .then(res => res.json())
+              .then(res => res.success);
+            if (response) {
+              this.$axios.post('/bike/' + this.bikeId + '/found/', report)
+                .then(response => {
+                  this.reportSent = true
+                })
+                .catch(e => {
+                  this.reportErrored = true;
+                  this.errorMessage = e
+                })
+            }
+
+          } catch (error) {
+            console.log('Login error:', error)
+          }
         }
       }
     }
