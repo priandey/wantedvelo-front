@@ -124,7 +124,8 @@
         return this.credentials.loginToken.length === 6
       }
     },
-    mounted () {
+
+    async mounted () {
       if (storageAvailable('localStorage')) {
         if (localStorage.getItem('authToken')) {
           let authToken = localStorage.getItem('authToken');
@@ -133,24 +134,51 @@
       } else {
         console.log('Navigateur incompatible');
       }
+      try {
+        await this.$recaptcha.init()
+      } catch (e) {
+        console.log(e);
+      }
     },
+
     methods: {
-      send_mail() {
+      async send_mail() {
         this.stepper.loading = true;
-        this.$axios.post(this.send_mail_ep, {'email': this.user.email})
-          .then(response => {
-            // Gerer la réponse
-            if (response.status === 200) {
-              this.error.errored = false;
-              this.stepper.loading = false;
-              this.stepper.step = 2
-            }
+        try {
+          const token = await this.$recaptcha.execute('login');
+          console.log(token);
+          const isAuthorized = await fetch('/api/check-token', {
+            method: 'POST',
+            body: JSON.stringify({
+              token,
+            })
           })
-          .catch(error => {
+            .then(res => res.json());
+          if(isAuthorized.success) {
+            this.$axios.post(this.send_mail_ep, {'email': this.user.email})
+              .then(response => {
+                // Gerer la réponse
+                if (response.status === 200) {
+                  this.error.errored = false;
+                  this.stepper.loading = false;
+                  this.stepper.step = 2
+                }
+              })
+              .catch(error => {
+                this.stepper.loading = false;
+                this.error.errored = true;
+                this.error.error_message = Object.entries(error.response.data)[0][1][0];
+              })
+          } else {
             this.stepper.loading = false;
             this.error.errored = true;
-            this.error.error_message = Object.entries(error.response.data)[0][1][0];
-          })
+            this.error.error_message = "Impossible de valider le test reCaptcha. Detail : " + isAuthorized.message
+          }
+        } catch (error) {
+          console.log('Login Error :', error);
+          this.error.errored = true;
+          this.error.error_message = error
+        }
       },
       get_token () {
         this.stepper.loading = true;
@@ -192,6 +220,10 @@
           })
       }
 
+    },
+
+    beforeDestroy() {
+      this.$recaptcha.destroy()
     },
   }
 

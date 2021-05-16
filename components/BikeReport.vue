@@ -85,6 +85,10 @@
         }
       },
 
+      beforeDestroy() {
+        this.$recaptcha.destroy()
+      },
+
       methods: {
         askLocation() {
           this.askedLocation = true
@@ -106,7 +110,7 @@
           };
           try {
             const token = await this.$recaptcha.execute('login');
-            const response = await fetch('/api/check-token', {
+            const isAuthorized = await fetch('/api/check-token', {
               method: 'POST',
               body: JSON.stringify({
                 token,
@@ -114,7 +118,7 @@
             })
               .then(res => res.json())
               .then(res => res.success);
-            if (response) {
+            if (isAuthorized) {
               this.$axios.post('/bike/' + this.bikeId + '/found/', report)
                 .then(response => {
                   this.reportSent = true
@@ -126,7 +130,7 @@
             }
 
           } catch (error) {
-            console.log('Login error:', error)
+            console.log('€rror:', error)
           }
         }
       }
