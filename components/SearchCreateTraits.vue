@@ -1,7 +1,7 @@
 <template>
     <v-combobox
-      label="Entrez une caractéristique"
-      placeholder="Une marque, une couleur, un type de vélo, etc."
+      :label="label"
+      :placeholder="placeholder"
       :prepend-icon="icon"
       v-model="select"
       :items="items"
@@ -35,6 +35,14 @@
               return {top:true, maxHeight:'150px'}
               },
             type: Object
+        },
+        placeholder: {
+            default: 'Une marque, une couleur, un type de vélo, etc.',
+            type: String
+        },
+        label: {
+            default: 'Entrez une caractéristique',
+            type: String
         },
         icon: {
           default:'mdi-bicycle',
@@ -99,19 +107,35 @@
           },
          async traitExist(trait) {
             return new Promise((resolve, reject) => {
-              this.$axios.get('/traits/', {
-                params: {
-                  qs: trait
-                }
-              })
-                .then(response => response.data.results)
-                .then(response => {
-                  if (response.length > 0) {
-                    resolve(true)
-                  } else {
-                    resolve(false)
+              if (this.createIfNone) {
+                this.$axios.get('/traits/', {
+                  params: {
+                    qs: trait
                   }
                 })
+                  .then(response => response.data.results)
+                  .then(response => {
+                    if (response.length > 0) {
+                      resolve(true)
+                    } else {
+                      resolve(false)
+                    }
+                  })
+              } else {
+                this.$axios.get('/', {
+                  params: {
+                    trait: trait
+                  }
+                })
+                  .then(response => response.data.results)
+                  .then(response => {
+                    if (response.length > 0) {
+                      resolve(true)
+                    } else {
+                      resolve(false)
+                    }
+                  })
+              }
             })
         }
       },

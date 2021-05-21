@@ -8,7 +8,9 @@
               :chips="true"
               @updateTraitsList="updateFiltering($event)"
               @selectionEmpty="refresh"
-              icon="mdi-magnify"></SearchCreateTraits>
+              icon="mdi-magnify"
+              label="Cherchez un vélo"
+              placeholder="Entrez une référence ou une caractéristique (marque, couleur, type de cadre, etc.)"></SearchCreateTraits>
           </v-row>
             <v-row>
                 <v-col
