@@ -67,8 +67,11 @@
           .then(response => {
             this.bike = response.data;
           })
+          .catch(e => console.log(e))
       },
-
+      mounted() {
+        this.$fetch();
+      },
       computed:{
         constructedURL() {
           if (typeof window !== 'undefined') {
@@ -101,7 +104,6 @@
 
       head() {
         return {
-          title: this.bike.reference + ', ce vélo a disparu !',
           meta: [
             {
               hid: 'description',
