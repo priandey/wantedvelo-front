@@ -51,7 +51,7 @@
           to="/"
           @change="updateActiveTab(1)">
             <v-icon>mdi-timeline-clock-outline</v-icon>
-            <span v-if="activeTab === 1" class="ml-2">Derniers vélos</span>
+            <span v-if="activeTab === 1" class="ml-2">Derniers vols</span>
           </v-tab>
 
           <v-tab
