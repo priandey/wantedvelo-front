@@ -8,36 +8,63 @@
       <div class="subheading">Retrouvons les vélos volés</div></v-toolbar-title>
 
       <v-spacer></v-spacer>
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <div v-on="on">
-            <v-btn
-              icon
-              @click="logout"
-              v-if="$store.state.auth.isAuthenticated"
-              title="Déconnexion">
-              <v-icon>mdi-logout-variant</v-icon>
-            </v-btn>
-          </div>
+      <v-menu
+        bottom
+        left
+        offset-x
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            dark
+            icon
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon>mdi-menu</v-icon>
+          </v-btn>
         </template>
-        <span>Déconnexion</span>
-      </v-tooltip>
 
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <div v-on="on">
-            <v-btn
-              icon
-              title="Déclarer un bug"
-              href="http://wantedbugs.priandey.eu"
-              target="_blank">
-              <v-icon>mdi-alert-circle</v-icon>
-            </v-btn>
-          </div>
-        </template>
-        <span>Déclarer un bug ou suggérer une amélioration</span>
-      </v-tooltip>
-
+        <v-list
+        >
+          <v-list-item
+          link
+          @click="newBikeAlert">
+            <v-list-item-title>Déclarer un vol</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+          to="/">
+            <v-list-item-title>Rechercher un vélo</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+          to="near">
+            <v-list-item-title>Les vols autour de moi</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+          to="owned">
+            <v-list-item-title>Voir mes déclarations</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+          v-if="$store.state.auth.isAuthenticated"
+          @click="logout">
+            <v-list-item-title>Déconnexion</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+          v-else
+          @click="verifyAuth">
+            <v-list-item-title>Connexion</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            disabled>
+            <v-list-item-title>A propos</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            href="http://wantedbugs.priandey.eu/"
+            target="_blank">
+            <v-list-item-title>Bug / Suggestion</v-list-item-title>
+            <v-list-item-icon><v-icon>mdi-arrow-top-right</v-icon></v-list-item-icon>
+          </v-list-item>
+        </v-list>
+      </v-menu>
       <template v-slot:extension v-tabs>
         <v-tabs
           grow
@@ -97,8 +124,11 @@
       },
       updateActiveTab(tabNumber) {
         this.activeTab = tabNumber
-      }
-    }
+      },
+      newBikeAlert() {
+        this.$router.push({ name: 'index', query: { action: 'addBike' } });
+      },
+    },
   }
 </script>
 
@@ -108,7 +138,7 @@
 }
 
   .subheading {
-    font-size: small;
+    font-size: medium;
   }
 
   .heading {

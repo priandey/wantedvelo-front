@@ -146,7 +146,6 @@
         this.stepper.loading = true;
         try {
           const token = await this.$recaptcha.execute('login');
-          console.log(token);
           const isAuthorized = await fetch('/api/check-token', {
             method: 'POST',
             body: JSON.stringify({

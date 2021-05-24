@@ -143,6 +143,7 @@
           this.$store.commit('openAuthPannel')
         }
         this.$store.commit('openBikePannel');
+        this.$router.replace({'query':null})
       },
     },
     async fetch() {
@@ -168,7 +169,10 @@
         })
     },
     mounted() {
-      this.$fetch()
+      if (this.queryActions === "addBike") {
+        this.addBike()
+      }
+      this.$fetch();
     },
     computed: {
       dialogWidth() {
@@ -185,6 +189,16 @@
             return "50vw"
         }
       },
+      queryActions() {
+        return this.$route.query.action
+      }
+    },
+    watch: {
+      queryActions(val) {
+        if (val==="addBike") {
+          this.addBike()
+        }
+      }
     },
 
   }
