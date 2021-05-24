@@ -63,25 +63,25 @@
         }
       },
       async fetch() {
-        await this.$axios.get('/bike/'+this.bikeId+'/')
-          .then(response => {
-            this.bike = response.data;
-          })
-          .catch(e => console.log(e))
+        if (this.providedBike) {
+          this.bike = this.providedBike
+        } else {
+          await this.$axios.get('/bike/' + this.bikeId + '/')
+            .then(response => {
+              this.bike = response.data;
+            })
+            .catch(e => console.log(e))
+        }
       },
       mounted() {
-        if(this.providedBike) {
-          this.bike = this.providedBike;
-        } else {
           this.$fetch();
-        }
       },
       computed:{
         constructedURL() {
           if (typeof window !== 'undefined') {
             return "https://" + window.location.host + this.$router.resolve({
               name: "alert-id",
-              params: {id: this.bikeId}
+              params: {id: this.bike.pk}
             }).href
           }
         },

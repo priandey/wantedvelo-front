@@ -63,12 +63,12 @@
                               <bike-report :bikeId="bike.pk"></bike-report>
                             </v-dialog>
                         </v-card-actions></v-card-title>
-                        <v-card-subtitle><span v-if="bike.robbery_city">À {{ bike.robbery_city }}, </span>le {{ bike.robbery_date}}</v-card-subtitle>
+                        <v-card-subtitle><span v-if="bike.robbery_city">À {{ bike.robbery_city }}, </span>le {{ bike.date_of_robbery}}</v-card-subtitle>
                       </v-card>
                     </template>
                     <bike-alert
-                      :bike-id="bike.pk"
-                      in-modal="true"></bike-alert>
+                      in-modal="true"
+                      :provided-bike="bike"></bike-alert>
                   </v-dialog>
 
             </v-col>
@@ -157,13 +157,7 @@
       })
         .then(response => {
           response.data.results.forEach(bike => {
-            this.bikes.push({
-              picture: bike.picture,
-              pk: bike.pk,
-              reference: bike.reference,
-              robbery_date: bike.date_of_robbery,
-              robbery_city: bike.robbery_city
-            })
+            this.bikes.push(bike)
           });
           this.bikeOffset += this.bikeCount
         })

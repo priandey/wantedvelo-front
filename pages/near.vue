@@ -14,7 +14,7 @@
                   v-for="bike in bikes"
                   v-bind:key="bike.pk"
                   :lat-lng="[bike.robbed_location.latitude, bike.robbed_location.longitude]"
-                  @click="openDialog($event,bike.pk)"
+                  @click="openDialog($event,bike)"
                 >
                   <l-tooltip><v-img :src="bike.picture" max-width="250"></v-img></l-tooltip>
                 </l-marker>
@@ -25,7 +25,7 @@
       v-model="dialog">
         <bike-alert
           v-if="dialog"
-          :bike-id="selected"
+          :provided-bike="selected"
           in-modal="true"></bike-alert>
       </v-dialog>
     </v-main>
@@ -43,8 +43,8 @@
           }
         },
         methods: {
-          openDialog(event,bikePk) {
-            this.selected = bikePk;
+          openDialog(event,bike) {
+            this.selected = bike;
             this.dialog = true;
             return false // Dirty way to stop event propagation manually
           },

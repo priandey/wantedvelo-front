@@ -1,6 +1,5 @@
 <template>
   <bike-alert
-  :bike-id="id"
   :provided-bike="bike"></bike-alert>
 </template>
 
