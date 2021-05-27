@@ -38,7 +38,7 @@
                         >
                         </v-img>
                         <v-card-title>
-                          {{ bike.reference }}
+                          <div class="truncated"> {{ bike.reference }} </div>
                           <v-card-actions>
                             <v-dialog
                             :width="dialogWidth">
@@ -198,4 +198,10 @@
   }
 </script>
 <style>
+  .truncated {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 16ch;
+  }
 </style>
