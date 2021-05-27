@@ -143,7 +143,13 @@
               })
                 .then(bike => {
                   this.bike = bike.data;
-                  this.$axios.patch('/bike/'+this.bike.pk+"/", {traits:this.traits})
+                  let serialized_traits = [];
+                  this.traits.forEach(trait => {
+                    let serialized_trait = trait.toLowerCase();
+                    serialized_trait = trait[0].toUpperCase() + trait.slice(1);
+                    serialized_traits.push(serialized_trait)
+                  });
+                  this.$axios.patch('/bike/'+this.bike.pk+"/", {traits:serialized_traits})
                     .then(response => {
                       this.isLoading = false;
                       this.isSent = true;

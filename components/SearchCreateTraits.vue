@@ -98,6 +98,11 @@
               if (!exist) {
                 if (this.createIfNone) {
                   this.$axios.post('/traits/', {name:newItem})
+                    .then(response => response.data.name)
+                    .then(response => {
+                      traits.splice(traits.length-1,1);
+                      traits.push(response);
+                    })
                 } else {
                   traits.splice(traits.length-1, 1)
                 }
