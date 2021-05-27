@@ -1,4 +1,5 @@
 import colors from 'vuetify/es5/util/colors'
+import redirectSSL from 'redirect-ssl'
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -36,7 +37,11 @@ export default {
   ],
 
   serverMiddleware: [
-    { path: '/api/check-token', handler: '~/api/recaptcha' }
+    { path: '/api/check-token', handler: '~/api/recaptcha' },
+    redirectSSL.create({
+      enabled: process.env.NODE_ENV === 'production'
+    }),
+
   ],
 
 
