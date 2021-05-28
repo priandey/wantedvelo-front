@@ -49,7 +49,7 @@ export default {
   modules: [
       '@nuxtjs/axios',
       'nuxt-leaflet',
-      '@nuxtjs/recaptcha'
+      '@nuxtjs/recaptcha',
   ],
 
   recaptcha: {

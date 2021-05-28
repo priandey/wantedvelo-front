@@ -31,7 +31,8 @@
     </v-card-title>
     <v-card-subtitle>Disparu le : {{bike.date_of_robbery}} <span v-if="bike.robbery_city">à {{bike.robbery_city}}</span>
       <social-share
-      :page-url="constructedURL"></social-share></v-card-subtitle>
+      :page-url="constructedURL"
+      @copiedToClipboard="openSnackBar"></social-share></v-card-subtitle>
       <template v-if="!inModal">
         <v-img>
       <div id="map-wrap" style="height: 30vh">
@@ -45,6 +46,23 @@
         </v-img>
       </template>
     </v-container>
+    <v-snackbar
+      v-model="snackbar"
+      timeout="1300"
+    >
+      Lien copié dans le presse-papier
+
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          color="blue"
+          text
+          v-bind="attrs"
+          @click="snackbar = false"
+        >
+          Fermer
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-card>
 </template>
 
@@ -60,6 +78,7 @@
               longitude:'2.3497009277343754',
             }
           },
+          snackbar: false,
         }
       },
       async fetch() {
@@ -104,6 +123,11 @@
               return "50vw"
           }
         },
+      },
+      methods: {
+        openSnackBar() {
+          this.snackbar = true;
+        }
       },
     }
 </script>

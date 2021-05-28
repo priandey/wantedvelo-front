@@ -48,6 +48,17 @@
     >
       <v-icon>mdi-twitter</v-icon>
     </v-btn>
+
+    <v-btn
+      dark
+      fab
+      bottom
+      color="blue-grey"
+      small
+      @click="copyToClipboard"
+    >
+      <v-icon>mdi-content-copy</v-icon>
+    </v-btn>
   </v-speed-dial>
     
 </template>
@@ -74,7 +85,16 @@
         encodedText() {
           return encodeURI(this.sharingText)
         },
-      }
+      },
+
+      methods: {
+        copyToClipboard() {
+          navigator.clipboard.writeText(this.pageUrl)
+            .then(e => {
+              this.$emit("copiedToClipboard")
+            })
+        }
+      },
     }
 </script>
 
