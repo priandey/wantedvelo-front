@@ -10,57 +10,105 @@
             {{ bike.name }}
           </v-expansion-panel-header> <!-- TODO : Add report and add Markers accordingly -->
           <v-expansion-panel-content>
-              <v-card elevation="0">
-                <v-card-title>Référence : {{ bike.reference }}</v-card-title>
-                <v-card-subtitle><v-chip v-for="trait in bike.traits" :key="trait">{{ trait }}</v-chip></v-card-subtitle>
-                <v-img :src="bike.picture" max-width="450"></v-img>
+            <v-card
+              elevation="0"
+              v-if="modify"
+            >
+              <v-form>
+                <v-text-field
+                v-model="bike.name"
+                maxlength="100"
+                counter
+                label="Nom du vélo"
+                hint="Ex: Vélo de Sarah"
+                prepend-icon="mdi-pencil"
+                ></v-text-field>
+                <v-text-field
+                  v-model="bike.reference"
+                  maxlength="255"
+                  counter
+                  label="Référence du vélo"
+                  hint="Bicycode, numéro de série du cadre, etc."
+                  prepend-icon="mdi-barcode"
+                ></v-text-field>
+              </v-form>
+            <v-card-actions>
+              <v-btn
+                color="primary"
+                @click="updateBike(bike)"
+                :loading="isLoading"
+                :disabled="isLoading"
+              >Enregistrer les modifications</v-btn>
+              <v-btn
+                color="red"
+                @click="toggleModify"
+              >
+                Annuler les modifications
+              </v-btn>
+            </v-card-actions>
+            </v-card>
 
-                <v-card-actions>
-                  <v-dialog
-                  hide-overlay
-                  max-width="250"
-                  v-model="confirmDialog">
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn v-on="on">J'ai retrouvé mon vélo !</v-btn>
-                    </template>
-                    <v-card>
-                      <v-card-text class="py-2">Quelle bonne nouvelle ! Merci de la confirmer</v-card-text>
-                      <v-card-actions class="pt-0">
-                        <v-btn @click="removeBike(bike.pk)" color="primary">Confirmer</v-btn>
-                        <v-btn @click="confirmDialog = false">Annuler</v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
-                </v-card-actions>
+            <v-card
+              elevation="0"
+              v-else
+            >
+              <v-card-title>Référence : {{ bike.reference }}</v-card-title>
+              <v-card-subtitle><v-chip v-for="trait in bike.traits" :key="trait">{{ trait }}</v-chip></v-card-subtitle>
+              <v-img :src="bike.picture" max-width="450"></v-img>
 
-                <template v-if="bike.alerts.length > 0">
-                  <v-card-title>Votre vélo a été vu !</v-card-title>
-                  <v-card-text>
-                    <v-expansion-panels>
-                      <v-expansion-panel v-for="alert in bike.alerts" :key="alert.date" @click="debugLeaflet">
-                        <v-expansion-panel-header>Vu le {{ alert.date }}</v-expansion-panel-header>
-                        <v-expansion-panel-content>
-                          <strong>Message de l'utilisateur :</strong> {{ alert.message }}
-                          <v-img> <!-- TODO: Leaflet loading only one tile on mount -->
-                            <div id="map-wrap" style="height: 40vh">
-                              <l-map :zoom=15 :center="[alert.coords.lat, alert.coords.lon]">
-                                <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
-                                <l-marker :lat-lng="[alert.coords.lat, alert.coords.lon]">
-                                  <l-tooltip>Votre vélo a été vu ici !</l-tooltip>
-                                </l-marker>
-                              </l-map>
-                            </div>
-                          </v-img>
-                        </v-expansion-panel-content>
-                      </v-expansion-panel>
-                    </v-expansion-panels>
-                  </v-card-text>
+              <v-card-actions>
+                <v-dialog
+                hide-overlay
+                max-width="250"
+                v-model="confirmDialog">
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    v-on="on"
+                    color="primary"
+                  >
+                    J'ai retrouvé mon vélo !
+                  </v-btn>
                 </template>
-                <template v-else>
-                  <v-card-title>Votre vélo n'a été repéré par personne...pour le moment !</v-card-title>
-                </template>
-              </v-card>
+                <v-card>
+                  <v-card-text class="py-2">Quelle bonne nouvelle ! Merci de la confirmer</v-card-text>
+                  <v-card-actions class="pt-0">
+                    <v-btn @click="removeBike(bike.pk)" color="primary">Confirmer</v-btn>
+                    <v-btn @click="confirmDialog = false">Annuler</v-btn>
+                  </v-card-actions>
+                </v-card>
+                </v-dialog>
+                <v-btn
+                class="ml-2"
+                @click="toggleModify">Modifier les informations</v-btn>
+              </v-card-actions>
 
+              <template v-if="bike.alerts.length > 0">
+                <v-card-title>Votre vélo a été vu !</v-card-title>
+                <v-card-text>
+                  <v-expansion-panels>
+                    <v-expansion-panel v-for="alert in bike.alerts" :key="alert.date" @click="debugLeaflet">
+                      <v-expansion-panel-header>Vu le {{ alert.date }}</v-expansion-panel-header>
+                      <v-expansion-panel-content>
+                        <strong>Message de l'utilisateur :</strong> {{ alert.message }}
+                        <v-img> <!-- TODO: Leaflet loading only one tile on mount -->
+                          <div id="map-wrap" style="height: 40vh">
+                            <l-map :zoom=15 :center="[alert.coords.lat, alert.coords.lon]">
+                              <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
+                              <l-marker :lat-lng="[alert.coords.lat, alert.coords.lon]">
+                                <l-tooltip>Votre vélo a été vu ici !</l-tooltip>
+                              </l-marker>
+                            </l-map>
+                          </div>
+                        </v-img>
+                      </v-expansion-panel-content>
+                    </v-expansion-panel>
+                  </v-expansion-panels>
+                </v-card-text>
+              </template>
+              <template v-else>
+                <v-card-title>Votre vélo n'a été repéré par personne...pour le moment !</v-card-title>
+              </template>
+            </v-card>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -93,6 +141,8 @@
           return {
             bikes:null,
             confirmDialog:false,
+            modify: false,
+            isLoading: false,
           }
       },
 
@@ -128,6 +178,26 @@
           this.$axios.patch("bike/"+id+"/", {robbed:false})
             .then(response => {
               this.$fetch()
+            })
+        },
+
+        toggleModify() {
+          this.modify = !this.modify;
+          if (this.modify === false) {
+            this.$fetch()
+          }
+        },
+
+        updateBike(bike) {
+          this.isLoading = true;
+          this.$axios.patch('/bike/' + bike.pk + "/", {
+            name: bike.name,
+            reference: bike.reference
+          })
+            .catch(e => console.log(e))
+            .finally(response => {
+              this.isLoading = false;
+              this.toggleModify();
             })
         }
       },
