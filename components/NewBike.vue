@@ -34,9 +34,16 @@
         ></v-text-field>
           <image-compressor @compressed="setFile($event)"></image-compressor>
       </v-form>
-
       <search-create-traits
       @updateTraitsList="updateTraits"></search-create-traits>
+        <vue-ctk-date-time-picker
+          label="Date et heure de le disparition"
+          v-model="bike.date_of_robbery"
+          locale="fr"
+          format="YYYY-MM-DDTHH:mmZ"
+          :dark="true"
+          button-now-translation="Maintenant"></vue-ctk-date-time-picker>
+
         <v-card-subtitle>Où votre vélo a-t-il disparu : </v-card-subtitle>
           <locate-user
             auto-locate
@@ -101,6 +108,7 @@
               reference: null,
               file: null,
               robbed:true,
+              date_of_robbery: new Date().toISOString(),
             },
             traits: [],
             textRules: [
@@ -133,6 +141,7 @@
               form_data.append('name', this.bike.name);
               form_data.append('robbed', this.bike.robbed);
               form_data.append('reference', this.bike.reference);
+              form_data.append('date_of_robbery', this.bike.date_of_robbery);
               form_data.append('picture', this.bike.file, this.bike.file.name);
               this.isLoading = true;
 

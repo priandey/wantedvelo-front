@@ -19,7 +19,8 @@
     "nuxt": "^2.14.12",
     "nuxt-leaflet": "0.0.25",
     "ohmyfetch": "^0.2.0",
-    "redirect-ssl": "^3.0.0"
+    "redirect-ssl": "^3.0.0",
+    "vue-ctk-date-time-picker": "^2.5.0"
   },
   "devDependencies": {
     "chromedriver": "^88.0.0",
