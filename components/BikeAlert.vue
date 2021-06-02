@@ -63,6 +63,29 @@
         </v-btn>
       </template>
     </v-snackbar>
+    <v-dialog
+    :width="dialogWidth">
+      <template v-slot:activator="{on:dialog, attrs}">
+        <v-tooltip
+          top
+          >
+          <template v-slot:activator="{on:tooltip, attrs}">
+        <v-btn
+          absolute
+          bottom
+          right
+          text
+          plain
+          dense
+          v-on="{...dialog, ...tooltip}"
+          color="red"><v-icon>mdi-alert-octagon-outline</v-icon></v-btn>
+          </template>
+          <span>Signaler ce contenu</span>
+        </v-tooltip>
+        </template>
+      <ReportInappropriateForm
+      :bike-id="bike.pk"></ReportInappropriateForm>
+    </v-dialog>
   </v-card>
 </template>
 
