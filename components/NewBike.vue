@@ -14,16 +14,6 @@
 
       <v-form v-model="isValid">
         <v-text-field
-          v-model="bike.name"
-          :rules="textRules"
-          maxlength="100"
-          counter
-          required
-          label="Nom du vélo"
-          hint="Ex: Vélo de Sarah"
-          prepend-icon="mdi-pencil"
-        ></v-text-field>
-        <v-text-field
           v-model="bike.reference"
           :rules="textRules"
           maxlength="255"
@@ -104,7 +94,6 @@
               lon:null,
             },
             bike: {
-              name: null,
               reference: null,
               file: null,
               robbed:true,
@@ -138,7 +127,6 @@
                 latitude: this.location.lat,
                 longitude: this.location.lon
               }));
-              form_data.append('name', this.bike.name);
               form_data.append('robbed', this.bike.robbed);
               form_data.append('reference', this.bike.reference);
               form_data.append('date_of_robbery', this.bike.date_of_robbery);

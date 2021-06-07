@@ -7,7 +7,7 @@
         v-for="bike in bikes"
         :key="bike.pk">
           <v-expansion-panel-header>
-            {{ bike.name }}
+            {{ bike.reference }}
           </v-expansion-panel-header> <!-- TODO : Add report and add Markers accordingly -->
           <v-expansion-panel-content>
             <v-card
@@ -15,14 +15,6 @@
               v-if="modify"
             >
               <v-form>
-                <v-text-field
-                v-model="bike.name"
-                maxlength="100"
-                counter
-                label="Nom du vélo"
-                hint="Ex: Vélo de Sarah"
-                prepend-icon="mdi-pencil"
-                ></v-text-field>
                 <v-text-field
                   v-model="bike.reference"
                   maxlength="255"
@@ -191,7 +183,6 @@
         updateBike(bike) {
           this.isLoading = true;
           this.$axios.patch('/bike/' + bike.pk + "/", {
-            name: bike.name,
             reference: bike.reference
           })
             .catch(e => console.log(e))
