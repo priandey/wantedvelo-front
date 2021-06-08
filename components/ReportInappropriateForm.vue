@@ -17,11 +17,13 @@
         </v-card-text>
         <v-btn
           color="primary"
-          block
           :disabled="!reasonSelected"
           :loading="loading"
           @click="sendReport"
         >Envoyer le rapport</v-btn>
+        <v-btn
+        color="grey"
+        @click="closeDialog">Annuler</v-btn>
       </template>
       <template v-else-if="error === true">
         <v-card-title>Une erreur est survenue</v-card-title>
@@ -122,6 +124,9 @@
           this.reportSent = false;
           this.error = false;
           this.precision = '';
+        },
+        closeDialog() {
+          this.$emit("closeDialog")
         }
       },
     }

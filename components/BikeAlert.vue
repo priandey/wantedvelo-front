@@ -6,18 +6,18 @@
     max-height="50vh"
     contain></v-img>
       <v-chip class="mr-1 mt-3" v-for="trait in bike.traits" :key="trait">{{ trait }}</v-chip>
-    <v-card-title>Référence : {{bike.reference}}
+    <v-card-title>Référence : {{ bike.reference }}
       <v-card-actions>
         <v-dialog
           :width="dialogWidth">
           <template v-slot:activator="{ on:dialog, attrs }">
             <v-tooltip top>
-              <template v-slot:activator="{on:tooltip}">
+              <template v-slot:activator="{ on:tooltip }">
                 <v-btn
                   color="primary"
                   dark
                   medium
-                  v-on="{...dialog, ...tooltip}"
+                  v-on="{ ...dialog, ...tooltip }"
                 >
                   <v-icon large>mdi-eye-plus-outline</v-icon>
                 </v-btn>
@@ -29,7 +29,7 @@
         </v-dialog>
       </v-card-actions>
     </v-card-title>
-    <v-card-subtitle>Disparu le : {{bike.date_of_robbery}} <span v-if="bike.robbery_city">à {{bike.robbery_city}}</span>
+    <v-card-subtitle>Disparu le : {{ bike.date_of_robbery }} <span v-if="bike.robbery_city">à {{bike.robbery_city}}</span>
       <social-share
       :page-url="constructedURL"
       @copiedToClipboard="openSnackBar"></social-share></v-card-subtitle>
@@ -64,7 +64,35 @@
       </template>
     </v-snackbar>
     <v-dialog
-    :width="dialogWidth">
+      :width="dialogWidth"
+      v-if="$store.state.auth.user.is_moderation"
+      v-model="moderationDialog">
+      <template v-slot:activator="{on:dialog, attrs}">
+        <v-tooltip
+          top
+        >
+          <template v-slot:activator="{on:tooltip, attrs}">
+            <v-btn
+              absolute
+              bottom
+              right
+              text
+              plain
+              dense
+              v-on="{...dialog, ...tooltip}"
+              color="red"><v-icon>mdi-delete-forever</v-icon></v-btn>
+          </template>
+          <span>Supprimer définitivement ce vélo</span>
+        </v-tooltip>
+      </template>
+      <DeleteBike
+        :bike-id="bike.pk"
+        @closeDialog="closeModerationDialog"></DeleteBike>
+    </v-dialog>
+    <v-dialog
+    :width="dialogWidth"
+    v-model="reportDialog"
+    v-else>
       <template v-slot:activator="{on:dialog, attrs}">
         <v-tooltip
           top
@@ -84,7 +112,8 @@
         </v-tooltip>
         </template>
       <ReportInappropriateForm
-      :bike-id="bike.pk"></ReportInappropriateForm>
+      :bike-id="bike.pk"
+      @closeDialog="closeReportDialog"></ReportInappropriateForm>
     </v-dialog>
   </v-card>
 </template>
@@ -102,6 +131,8 @@
             }
           },
           snackbar: false,
+          moderationDialog: false,
+          reportDialog: false,
         }
       },
       async fetch() {
@@ -150,6 +181,14 @@
       methods: {
         openSnackBar() {
           this.snackbar = true;
+        },
+
+        closeModerationDialog() {
+          this.moderationDialog = false
+        },
+
+        closeReportDialog() {
+          this.reportDialog = false
         }
       },
     }

@@ -20,6 +20,10 @@ export const mutations = {
     state.auth.showPannel = false;
   },
 
+  registerUser(state, user) {
+    state.auth.user = user
+  },
+
   resetAuth(state) {
     localStorage.removeItem('authToken');
     this.$axios.setToken(false);

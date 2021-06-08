@@ -153,7 +153,7 @@
             })
           })
             .then(res => res.json());
-          if(isAuthorized.success) {
+          if (isAuthorized.success) {
             this.$axios.post(this.send_mail_ep, {'email': this.user.email})
               .then(response => {
                 // Gerer la réponse
@@ -179,7 +179,7 @@
           this.error.error_message = error
         }
       },
-      get_token () {
+      get_token() {
         this.stepper.loading = true;
         this.$axios.post(this.send_token_ep, {
           'email': this.user.email,
@@ -202,7 +202,7 @@
             this.credentials.loginToken = "";
           })
       },
-      verify_auth_token (token) {
+      verify_auth_token(token) {
         this.$axios.get(this.verify_auth_token_ep, {
           headers: {
             Authorization: 'Token ' + token //the token is a variable which holds the token
@@ -212,18 +212,23 @@
             if (response.status === 200) {
               this.$store.commit('authenticate', token);
               this.$axios.setToken(token, 'Token');
+              this.$axios.get('user/')
+                .then(response => {
+                    this.$store.commit('registerUser', response.data)
+                  }
+                )
               return true
             } else {
               return false
             }
           })
-      }
 
-    },
+      },
 
-    beforeDestroy() {
-      this.$recaptcha.destroy()
-    },
+      beforeDestroy() {
+        this.$recaptcha.destroy()
+      },
+    }
   }
 
   function storageAvailable(type) {
