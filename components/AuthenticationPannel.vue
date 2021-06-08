@@ -217,6 +217,9 @@
                     this.$store.commit('registerUser', response.data)
                   }
                 )
+                .catch(e => {
+                  console.log(e)
+                })
               return true
             } else {
               return false

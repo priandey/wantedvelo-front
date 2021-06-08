@@ -3,6 +3,12 @@ export const state = () => ({
     isAuthenticated: false,
     authToken: '',
     showPannel: false,
+    user: {
+      is_institution: false,
+      is_moderation: false,
+      email:'',
+      geographic_zone: '',
+    }
   },
   addBikePannel: false,
   localisation: {

@@ -44,6 +44,10 @@
             <v-list-item-title>Voir mes déclarations</v-list-item-title>
           </v-list-item>
           <v-list-item
+          to="stats">
+            <v-list-item-title>Statistiques</v-list-item-title>
+          </v-list-item>
+          <v-list-item
           v-if="$store.state.auth.isAuthenticated"
           @click="logout">
             <v-list-item-title>Déconnexion</v-list-item-title>
