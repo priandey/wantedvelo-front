@@ -8,14 +8,35 @@
             <v-btn
               color="primary"
             @click="downloadXLSXFile">
-              Télécharger le fichier excel
+              Télécharger les données (.xlsx)
             </v-btn>
           </v-card-actions>
+          <v-card-subtitle>Taille de l'échantillon : {{bikes.length}} vélos</v-card-subtitle>
+          <v-container>
+            <v-row
+            align="stretch">
+              <v-col
+                cols="12"
+                md="6">
+                <ChartBikeTheftByHours
+                  :bikes="bikes"></ChartBikeTheftByHours>
+              </v-col>
+              <v-col
+                cols="12"
+                md="6">
+                <ChartBikeFound
+                  :bikes="bikes"></ChartBikeFound>
+              </v-col>
+              <v-col
+                cols="12"
+                md="6">
+                <ChartBikeTheftByMonthYear
+                  :bikes="bikes"></ChartBikeTheftByMonthYear>
+              </v-col>
+            </v-row>
+          </v-container>
         </v-card>
-          <ChartBikeTheftByMonthYear
-          :bikes="bikes"></ChartBikeTheftByMonthYear>
-          <ChartBikeTheftByHours
-          :bikes="bikes"></ChartBikeTheftByHours>
+
       </template>
 
       <template
@@ -82,7 +103,11 @@
             })
         },
       },
-
+      mounted() {
+        if (this.is_institution) {
+          this.get_bikes()
+        }
+      },
       watch: {
         is_institution(val) {
           if (val) {

@@ -1,7 +1,5 @@
 <template>
-  <v-card>
-  <apexchart :width="chartWidth" type="pie" :options="options" :series="series" ref="pieChart"></apexchart>
-  </v-card>
+    <apexchart type="donut" :options="options" :series="series" ref="pieChart"></apexchart>
 </template>
 
 <script>
@@ -10,7 +8,7 @@
       props: {
           bikes: {
             type: Array
-          }
+          },
       },
       data: function() {
         return {
@@ -65,26 +63,12 @@
           },
       },
       watch: {
-          'bikes'() {
-            this.compile()
+          'bikes'(val) {
+            if (val.length > 0) {
+              this.compile()
+            }
           }
       },
-      computed: {
-        chartWidth() {
-          switch (this.$vuetify.breakpoint.name) {
-            case 'xs':
-              return "312";
-            case 'sm':
-              return "500";
-            case 'md':
-              return "768";
-            case 'lg':
-              return "1000";
-            case 'xl':
-              return "1000"
-          }
-        },
-      }
     }
 </script>
 
