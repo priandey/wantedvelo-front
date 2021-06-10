@@ -30,7 +30,7 @@
             dataLabels: {
               enabled: true,
               formatter: function (val, opts) {
-                return val + "%"
+                return Math.round(val) + "%"
               },
             }
           },

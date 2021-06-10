@@ -35,7 +35,7 @@
             dataLabels: {
               enabled: true,
               formatter: function (val, opts) {
-                return opts.w.config.labels[opts.seriesIndex] + " : " + val + "% " + "(" + opts.w.config.series[opts.seriesIndex] + ")"
+                return opts.w.config.labels[opts.seriesIndex] + " : " + Math.round(val) + "% " + "(" + opts.w.config.series[opts.seriesIndex] + ")"
               },
             }
           },
