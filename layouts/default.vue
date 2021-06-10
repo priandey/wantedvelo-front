@@ -105,8 +105,8 @@
     </v-toolbar>
 
   </v-card>
-      <Nuxt />
       <AuthenticationPannel />
+      <Nuxt />
     </v-app>
 </template>
 

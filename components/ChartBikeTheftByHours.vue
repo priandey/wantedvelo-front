@@ -1,0 +1,93 @@
+<template>
+  <v-card>
+  <apexchart :width="chartWidth" type="pie" :options="options" :series="series" ref="pieChart"></apexchart>
+  </v-card>
+</template>
+
+<script>
+    export default {
+        name: "ChartBikeTheftByHours",
+      props: {
+          bikes: {
+            type: Array
+          }
+      },
+      data: function() {
+        return {
+          options: {
+            title: {
+              text: "Vols de vélos en fonction de l'heure"
+            },
+            theme: {
+              mode: 'dark',
+              palette: 'palette2',
+              monochrome: {
+                enabled: true,
+                color: '#4caf50',
+                shadeTo: 'dark',
+              }
+            },
+            chart: {
+              id: 'biketheftbyhour',
+              toolbar: {
+                show:true
+              }
+            },
+            labels: [],
+            dataLabels: {
+              enabled: true,
+              formatter: function (val, opts) {
+                return opts.w.config.labels[opts.seriesIndex] + " : " + val + "% " + "(" + opts.w.config.series[opts.seriesIndex] + ")"
+              },
+            }
+          },
+          series: [],
+        }
+      },
+      methods: {
+          compile(){
+            this.bikes.forEach(bike => {
+              bike.date_of_robbery = new Date(bike.date_of_robbery);
+              bike.hour = bike.date_of_robbery.getHours()
+            });
+            this.options.labels = [...new Set(this.bikes.map(item => String(item.hour)+"h"))].sort();
+            this.series = [];
+            this.options.labels.forEach(hour => {
+              let theft = 0;
+              this.bikes.forEach(bike => {
+                if (String(bike.hour) + "h" === hour){
+                  theft += 1
+                }
+              });
+              this.series.push(theft);
+            });
+            this.$refs.pieChart.refresh()
+          },
+      },
+      watch: {
+          'bikes'() {
+            this.compile()
+          }
+      },
+      computed: {
+        chartWidth() {
+          switch (this.$vuetify.breakpoint.name) {
+            case 'xs':
+              return "312";
+            case 'sm':
+              return "500";
+            case 'md':
+              return "768";
+            case 'lg':
+              return "1000";
+            case 'xl':
+              return "1000"
+          }
+        },
+      }
+    }
+</script>
+
+<style scoped>
+
+</style>

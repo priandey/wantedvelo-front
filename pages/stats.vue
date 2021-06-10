@@ -1,18 +1,26 @@
 <template>
     <v-main>
-      <v-card
-      v-if="is_institution">
-        <v-card-title>Vélos volés et retrouvés à : {{ geo_zones }}</v-card-title>
-        <v-card-actions>
-          <v-btn
-            color="primary"
-          @click="downloadXLSXFile">
-            Télécharger le fichier excel
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-      <v-card
-      v-else>
+      <template
+        v-if="is_institution">
+        <v-card>
+          <v-card-title>Vélos volés et retrouvés à : {{ geo_zones }}</v-card-title>
+          <v-card-actions>
+            <v-btn
+              color="primary"
+            @click="downloadXLSXFile">
+              Télécharger le fichier excel
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+          <ChartBikeTheftByMonthYear
+          :bikes="bikes"></ChartBikeTheftByMonthYear>
+          <ChartBikeTheftByHours
+          :bikes="bikes"></ChartBikeTheftByHours>
+      </template>
+
+      <template
+        v-else>
+      <v-card>
         <v-card-title>Votre compte n'est pas accrédité pour accéder à ce service</v-card-title>
         <v-card-actions>
           <v-btn
@@ -21,12 +29,18 @@
             >Revenir à la page précédente</v-btn>
         </v-card-actions>
       </v-card>
+      </template>
     </v-main>
 </template>
 
 <script>
     export default {
-        name: "stats",
+      name: "stats",
+      data() {
+        return {
+          bikes:[],
+        }
+      },
       computed: {
         is_institution() {
           if (this.$store.state.auth.isAuthenticated) {
@@ -42,7 +56,6 @@
           }
         },
       },
-
       methods: {
         downloadXLSXFile() {
           let config = {
@@ -61,7 +74,22 @@
               fileLink.click()
             })
         },
-      }
+        async get_bikes() {
+          await this.$axios.get('stats/')
+            .then(response => response.data)
+            .then(response => {
+              this.bikes = response;
+            })
+        },
+      },
+
+      watch: {
+        is_institution(val) {
+          if (val) {
+            this.get_bikes()
+          }
+        }
+      },
     }
 </script>
 
