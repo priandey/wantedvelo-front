@@ -65,7 +65,7 @@
       computed: {
         is_institution() {
           if (this.$store.state.auth.isAuthenticated) {
-            return this.$store.state.auth.user.is_institution
+            return Boolean(this.$store.state.auth.user.is_institution|this.$store.state.auth.user.is_staff)
           } else {
             return false
           }
@@ -73,7 +73,11 @@
 
         geo_zones() {
           if (this.is_institution) {
-            return this.$store.state.auth.user.geographic_zone
+            if(this.$store.state.auth.user.is_institution) {
+              return this.$store.state.auth.user.geographic_zone
+            } else if (this.$store.state.auth.user.is_staff) {
+              return "France entière"
+            }
           }
         },
       },
