@@ -130,7 +130,9 @@
               form_data.append('robbed', this.bike.robbed);
               form_data.append('reference', this.bike.reference);
               form_data.append('date_of_robbery', this.bike.date_of_robbery);
-              form_data.append('picture', this.bike.file, this.bike.file.name);
+              if (this.bike.file) {
+                form_data.append('picture', this.bike.file, this.bike.file.name);
+              }
               this.isLoading = true;
 
               this.$axios.post('/', form_data, {
