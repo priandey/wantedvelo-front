@@ -1,149 +1,82 @@
 <template>
-    <v-combobox
-      :label="label"
-      :placeholder="placeholder"
-      :prepend-icon="icon"
-      v-model="select"
-      :items="items"
-      :loading="isLoading"
-      :search-input.sync="search"
-      dense
-      :chips="chips"
-      hide-selected
-      multiple
-      hide-no-data
-      :menu-props="menuprops"
-      deletable-chips
-      @change="updateTraits($event)"
-    ></v-combobox>
+    <v-container>
+      <v-row>
+        <v-col
+          cols="12"
+          v-if="createIfNone"
+        >Entrez des caractéristiques pour votre vélo (Une par case)
+        </v-col>
+        <v-col
+          cols="12"
+          v-else>Rechercher par caractéristiques
+          <v-btn
+            icon
+            @click="visible = !visible"
+          >
+            <v-icon v-if="!visible">mdi-menu-down</v-icon>
+            <v-icon v-else>mdi-menu-up</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row v-if="visible | createIfNone">
+        <v-col
+        v-for="n in traitsNumber" :key="n"
+        cols="11"
+        sm="3"
+        md="2"
+        lg="2">
+          <SingleTraitInput
+          :create-if-none="createIfNone"
+          @pushTrait="updateTraitsList($event)"></SingleTraitInput>
+        </v-col>
+        <v-col
+        cols="1">
+          <v-btn
+            icon
+            @click="traitsNumber += 1">
+            <v-icon>mdi-plus-circle-outline</v-icon>
+          </v-btn>
+          <v-btn
+            icon
+            @click="traitsNumber -= 1">
+            <v-icon>mdi-minus-circle-outline</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
 </template>
 
 <script>
     export default {
-        name: "SearchCreateTraits",
+      name: "SearchCreateTraits",
+
       props: {
           createIfNone: {
             default: true,
             type: Boolean,
           },
-        chips: {
-          default:false,
-          type: Boolean,
-        },
-        menuprops: {
-            default:function() {
-              return {top:true, maxHeight:'150px'}
-              },
-            type: Object
-        },
-        placeholder: {
-            default: 'Une marque, une couleur, un type de vélo, etc.',
-            type: String
-        },
-        label: {
-            default: 'Entrez une caractéristique',
-            type: String
-        },
         icon: {
           default:'mdi-bicycle',
           type: String
         }
       },
+
       data() {
           return {
-            items:[],
-            select: [],
-            isLoading:false,
-            search:null,
+            traitsList: [],
+            traitsNumber: 3,
+            visible: false,
           }
       },
 
-      watch: {
-        search (val) {
-          // Items have already been requested
-          if (this.isLoading) return;
-
-          this.isLoading = true;
-          this.items = [];
-
-          this.$axios.get("/traits/", {
-            params: {
-              qs:val,
-            },
-          })
-            .then(response => response.data.results)
-            .then(response => {
-              response.forEach(item => {
-                this.items.push(item.name)
-              })
-            })
-            .finally(() => (this.isLoading = false))
-        },
-        select (val) {
-          if (val.length === 0) {
-            this.$emit('selectionEmpty')
-          }
-        },
-      },
-      computed: {
-        newItems () {
-          return this.select.filter(x => !this.items.includes(x))
-        },
-      },
       methods: {
-          async updateTraits(traits) {
-            if (traits.length > 0) {
-              let newItem = traits[traits.length-1];
-              let exist = await this.traitExist(newItem);
-              if (!exist) {
-                if (this.createIfNone) {
-                  this.$axios.post('/traits/', {name:newItem})
-                    .then(response => response.data.name)
-                    .then(response => {
-                      traits.splice(traits.length-1,1);
-                      traits.push(response);
-                    })
-                } else {
-                  traits.splice(traits.length-1, 1)
-                }
-              }
-              this.$emit('updateTraitsList', this.select)
-            }
-          },
-         async traitExist(trait) {
-            return new Promise((resolve, reject) => {
-              if (this.createIfNone) {
-                this.$axios.get('/traits/', {
-                  params: {
-                    qs: trait
-                  }
-                })
-                  .then(response => response.data.results)
-                  .then(response => {
-                    if (response.length > 0) {
-                      resolve(true)
-                    } else {
-                      resolve(false)
-                    }
-                  })
-              } else {
-                this.$axios.get('/', {
-                  params: {
-                    trait: trait
-                  }
-                })
-                  .then(response => response.data.results)
-                  .then(response => {
-                    if (response.length > 0) {
-                      resolve(true)
-                    } else {
-                      resolve(false)
-                    }
-                  })
-              }
-            })
-        }
-      },
+        updateTraitsList(trait) {
+          if (trait != null) {
+            this.traitsList.push(trait);
+            this.$emit("updateTraitsList", this.traitsList)
+          }
+        },
+      }
     }
 </script>
 
