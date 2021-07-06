@@ -1,7 +1,19 @@
 <template app>
     <v-main>
         <v-container>
-          <v-row class="mt-1">
+          <v-row
+            class="mt-1"
+            justify="start">
+              <v-col
+              cols="12"
+              md="4">
+                <SearchByReference
+                @searchResult="showResult($event)"
+                @emptySearch="refresh"></SearchByReference>
+              </v-col>
+            <v-col
+            col="12"
+            md="8">
               <SearchCreateTraits
               :menuprops="{maxHeight:'150px'}"
               :create-if-none="false"
@@ -10,6 +22,7 @@
               icon="mdi-magnify"
               label="Cherchez un vélo"
               placeholder="Entrez une référence ou une caractéristique (marque, couleur, type de cadre, etc.)"></SearchCreateTraits>
+            </v-col>
           </v-row>
             <v-row>
                 <v-col
@@ -133,6 +146,11 @@
           this.refresh()
         }
       },
+
+      showResult(bikes) {
+        this.bikes = bikes
+      },
+
       infiniteScroll (entries, observer, isIntersecting) {
         if (isIntersecting) {
             this.$fetch();

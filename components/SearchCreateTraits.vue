@@ -70,6 +70,12 @@
           }
       },
 
+      mounted() {
+        if (this.createIfNone === false) {
+          this.traitsNumber = 1
+        }
+      },
+
       methods: {
         updateTraitsList(trait) {
           if (typeof(trait) === "string") {
