@@ -27,10 +27,11 @@
         lg="2">
           <SingleTraitInput
           :create-if-none="createIfNone"
-          @pushTrait="updateTraitsList($event)"></SingleTraitInput>
+          @pushTrait="updateTraitsList($event)"
+          @selectionEmpty="updateTraitsList(n)"></SingleTraitInput>
         </v-col>
         <v-col
-        cols="1">
+        cols="2">
           <v-btn
             icon
             @click="traitsNumber += 1">
@@ -38,7 +39,7 @@
           </v-btn>
           <v-btn
             icon
-            @click="traitsNumber -= 1">
+            @click="removeInput">
             <v-icon>mdi-minus-circle-outline</v-icon>
           </v-btn>
         </v-col>
@@ -71,11 +72,24 @@
 
       methods: {
         updateTraitsList(trait) {
-          if (trait != null) {
+          if (typeof(trait) === "string") {
             this.traitsList.push(trait);
+            this.$emit("updateTraitsList", this.traitsList)
+          } else if (typeof(trait) === "number") {
+            this.traitsList.splice(trait-1, 1);
             this.$emit("updateTraitsList", this.traitsList)
           }
         },
+
+        removeInput() {
+          let listLength = this.traitsList.length;
+          if (this.traitsNumber > listLength) {
+            this.traitsNumber -= 1;
+          } else if (this.traitsNumber === listLength){
+            this.updateTraitsList(this.traitsNumber);
+            this.traitsNumber -= 1
+          }
+        }
       }
     }
 </script>

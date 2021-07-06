@@ -7,7 +7,6 @@
               :create-if-none="false"
               :chips="true"
               @updateTraitsList="updateFiltering($event)"
-              @selectionEmpty="refresh"
               icon="mdi-magnify"
               label="Cherchez un vélo"
               placeholder="Entrez une référence ou une caractéristique (marque, couleur, type de cadre, etc.)"></SearchCreateTraits>
@@ -130,7 +129,8 @@
           this.endpoints.search_type = 'filtered';
           this.endpoints.traits = traits.join();
           this.$fetch();
-          console.log(event)
+        } else {
+          this.refresh()
         }
       },
       infiniteScroll (entries, observer, isIntersecting) {
