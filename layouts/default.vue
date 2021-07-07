@@ -40,11 +40,13 @@
             <v-list-item-title>Les vols autour de moi</v-list-item-title>
           </v-list-item>
           <v-list-item
-          to="owned">
+          to="owned"
+          v-if="$store.state.auth.isAuthenticated">
             <v-list-item-title>Voir mes déclarations</v-list-item-title>
           </v-list-item>
           <v-list-item
-          to="stats">
+          to="stats"
+          v-if="$store.state.auth.user.is_institution">
             <v-list-item-title>Statistiques</v-list-item-title>
           </v-list-item>
           <v-list-item
