@@ -4,7 +4,7 @@
     <v-toolbar
       color="primary"
     >
-      <v-toolbar-title><span class="heading">WantedVelo</span>
+      <v-toolbar-title><span class="heading">WantedVelo <span class="superscript">alpha</span></span>
       <div class="subheading">Déclarez le vol de votre vélo</div></v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -140,6 +140,10 @@
 .active-tab {
     color: rgba(255, 145, 0, 0.9); // orange accent 3
 }
+  .superscript {
+    vertical-align: super;
+    font-size: 60%
+  }
 
   .subheading {
     font-size: medium;
