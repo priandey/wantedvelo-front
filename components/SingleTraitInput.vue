@@ -1,6 +1,6 @@
 <template>
     <v-combobox
-      placeholder="Marque, couleur, etc."
+      placeholder="Marque, modèle, couleur, etc."
       outlined
       solo
       dense
