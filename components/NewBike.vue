@@ -57,9 +57,17 @@
       </v-card-actions>
       </v-container>
       <v-container v-if="!isLoading && isSent">
-        <v-card-title><v-icon color="primary">mdi-check</v-icon>Votre vélo a bien été enregistré comme volé</v-card-title>
+        <v-card-title><v-icon color="primary">mdi-check</v-icon> Votre vélo a bien été enregistré comme volé</v-card-title>
       </v-container>
-        <v-card-actions><v-btn @click="endCreation">Fermer</v-btn></v-card-actions>
+          <v-container v-else-if="error.errored">
+            <v-card-title><v-icon color="red">mdi-cancel</v-icon> Une erreur est survenue lors de l'enregistrement de votre vélo</v-card-title>
+            <v-card-text>Merci de faire parvenir le message d'erreur ci-dessous en décrivant vos actions <a href="http://wantedbugs.priandey.eu">en suivant ce lien</a></v-card-text>
+            <v-card-text>Error {{error.errorStatus}}: {{ error.errorMsg }}</v-card-text>
+          </v-container>
+        <v-card-actions>
+          <v-btn @click="endCreation">Fermer</v-btn>
+          <v-btn v-if="error.errored" @click="tryAgain">Réessayer</v-btn>
+        </v-card-actions>
         </v-card-text>
       </v-card>
     </v-bottom-sheet>
@@ -98,6 +106,12 @@
               file: null,
               robbed:true,
               date_of_robbery: new Date().toISOString(),
+            },
+            bikeCreated: false,
+            error: {
+              errored: false,
+              errorMsg: '',
+              errorStatus: '',
             },
             traits: [],
             textRules: [
@@ -142,6 +156,7 @@
               })
                 .then(bike => {
                   this.bike = bike.data;
+                  this.bikeCreated = true;
                   let serialized_traits = [];
                   this.traits.forEach(trait => {
                     let serialized_trait = trait.toLowerCase();
@@ -153,6 +168,16 @@
                       this.isLoading = false;
                       this.isSent = true;
                     })
+                    .catch(e => {
+                      this.error.errored = true;
+                      this.error.errorMsg = e.response.data;
+                      this.error.status = e.response.status;
+                    })
+                })
+                .catch(e => {
+                  this.error.errored = true;
+                  this.error.errorMsg = e.response.data;
+                  this.error.status = e.response.status;
                 })
             }
           },
@@ -163,6 +188,17 @@
             this.$emit("creationEnded");
             this.isSent = false;
             this.$store.commit('closeBikePannel');
+          },
+
+          tryAgain() {
+            if (this.bikeCreated) {
+              this.$axios.delete('/bike/' +  this.bike.pk + '/');
+            }
+            this.isLoading = false;
+            this.isSent = false;
+            this.bikeCreated = false;
+            this.bike.date_of_robbery = '';
+            this.error.errored = false;
           }
       }
     }

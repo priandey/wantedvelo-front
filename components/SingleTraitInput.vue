@@ -71,13 +71,15 @@
                   this.$axios.post('/traits/', {name:trait})
                     .then(response => response.data.name)
                     .then(response => {
-                      trait = response
+                      trait = response;
+                      this.$emit('pushTrait', trait)
                     })
                 } else {
                   this.select = null;
                 }
+              } else {
+                this.$emit('pushTrait', this.select)
               }
-              this.$emit('pushTrait', this.select)
             }
           },
         async traitExist(trait) {
