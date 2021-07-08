@@ -129,6 +129,10 @@
       if (storageAvailable('localStorage')) {
         if (localStorage.getItem('authToken')) {
           let authToken = localStorage.getItem('authToken');
+          let firstVisit = localStorage.getItem('firstVisit');
+          if (firstVisit != "false") {
+            this.$store.commit("firstVisit")
+          }
           this.verify_auth_token(authToken);
         }
       } else {

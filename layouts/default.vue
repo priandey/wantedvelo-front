@@ -60,7 +60,7 @@
             <v-list-item-title>Connexion</v-list-item-title>
           </v-list-item>
           <v-list-item
-            disabled>
+            @click="$store.commit('firstVisit')">
             <v-list-item-title>A propos</v-list-item-title>
           </v-list-item>
           <v-list-item
@@ -108,6 +108,7 @@
 
   </v-card>
       <AuthenticationPannel />
+      <FirstVisitDisclaimer></FirstVisitDisclaimer>
       <Nuxt />
     </v-app>
 </template>

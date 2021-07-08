@@ -1,4 +1,5 @@
 export const state = () => ({
+  firstVisit: false,
   auth: {
     isAuthenticated: false,
     authToken: '',
@@ -24,6 +25,16 @@ export const mutations = {
     state.auth.isAuthenticated = true;
     state.auth.authToken = token;
     state.auth.showPannel = false;
+  },
+
+  firstVisit(state) {
+    state.firstVisit = true;
+    localStorage.setItem('firstVisit', 'true')
+  },
+
+  notFirstVisit(state) {
+    state.firstVisit = false;
+    localStorage.setItem('firstVisit', 'false')
   },
 
   registerUser(state, user) {
