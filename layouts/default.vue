@@ -4,8 +4,16 @@
     <v-toolbar
       color="primary"
     >
-      <v-toolbar-title><span class="heading">WantedVelo <span class="superscript">alpha</span></span>
-      <div class="subheading">Déclarez le vol de votre vélo</div></v-toolbar-title>
+
+      <v-img
+        class="pa-0 mx-1 mt-4"
+        src="/logo.png"
+        max-height="14vh"
+        max-width="13vh"
+        min-height="60px"
+        min-width="60px"
+        contain
+      ></v-img>
 
       <v-spacer></v-spacer>
       <v-menu
@@ -150,10 +158,6 @@
 
   .subheading {
     font-size: medium;
-  }
-
-  .heading {
-    font-weight: bold;
   }
 
 </style>
