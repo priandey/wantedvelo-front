@@ -63,10 +63,17 @@
           ></v-textarea>
         </v-card-text>
 
+        <v-card-text>
+          <v-checkbox
+            v-model="checkbox"
+            label="J'atteste sur l'honneur que ce vélo est ma propriété, et qu'il a disparu dans les circonstances décrites dans ce formulaire"
+          ></v-checkbox>
+        </v-card-text>
+
       <v-card-actions>
       <v-btn
       @click="submit"
-      :disabled="!readyToSubmit">Enregistrer mon vélo</v-btn>
+      :disabled="readyToSubmit">Enregistrer mon vélo</v-btn>
       </v-card-actions>
       </v-container>
       <v-container v-if="!isLoading && isSent">
@@ -110,11 +117,12 @@
             }
           },
           readyToSubmit() {
-            return this.isValid && this.location.isLocated
+            return !(this.isValid && this.location.isLocated && this.checkbox)
           },
         },
         data () {
           return {
+            checkbox:false,
             isValid:false,
             isLoading:false,
             isSent:false,
