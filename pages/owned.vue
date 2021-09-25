@@ -1,128 +1,142 @@
 <template>
   <v-container>
-    <template v-if="isAuthenticated">
-      <v-expansion-panels
-      inset>
-        <v-expansion-panel
-        v-for="bike in bikes"
-        :key="bike.pk">
-          <v-expansion-panel-header>
-            {{ bike.reference }}
-          </v-expansion-panel-header> <!-- TODO : Add report and add Markers accordingly -->
-          <v-expansion-panel-content>
-            <v-card
-              elevation="0"
-              v-if="modify"
-            >
-              <v-form>
-                <v-text-field
-                  v-model="bike.reference"
-                  maxlength="255"
-                  counter
-                  label="Référence du vélo"
-                  hint="Bicycode, numéro de série du cadre, etc."
-                  prepend-icon="mdi-barcode"
-                ></v-text-field>
-              </v-form>
+    <v-row>
+      <template v-if="isAuthenticated">
+        <v-expansion-panels
+        inset>
+          <v-expansion-panel
+          v-for="bike in bikes"
+          :key="bike.pk">
+            <v-expansion-panel-header>
+              {{ bike.reference }}
+            </v-expansion-panel-header> <!-- TODO : Add report and add Markers accordingly -->
+            <v-expansion-panel-content>
+              <v-card
+                elevation="0"
+                v-if="modify"
+              >
+                <v-form>
+                  <v-text-field
+                    v-model="bike.reference"
+                    maxlength="255"
+                    counter
+                    label="Référence du vélo"
+                    hint="Bicycode, numéro de série du cadre, etc."
+                    prepend-icon="mdi-barcode"
+                  ></v-text-field>
+                </v-form>
+              <v-card-actions>
+                <v-btn
+                  color="primary"
+                  @click="updateBike(bike)"
+                  :loading="isLoading"
+                  :disabled="isLoading"
+                >Enregistrer les modifications</v-btn>
+                <v-btn
+                  color="red"
+                  @click="toggleModify"
+                >
+                  Annuler les modifications
+                </v-btn>
+              </v-card-actions>
+              </v-card>
+
+              <v-card
+                elevation="0"
+                v-else
+              >
+                <v-card-title>Référence : {{ bike.reference }}</v-card-title>
+                <v-card-subtitle><v-chip v-for="trait in bike.traits" :key="trait">{{ trait }}</v-chip></v-card-subtitle>
+                <v-img :src="bike.picture" max-width="450"></v-img>
+
+                <v-card-actions>
+                  <v-dialog
+                  hide-overlay
+                  max-width="250"
+                  v-model="confirmDialog">
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      v-on="on"
+                      color="primary"
+                    >
+                      J'ai retrouvé mon vélo !
+                    </v-btn>
+                  </template>
+                  <v-card>
+                    <v-card-text class="py-2">Quelle bonne nouvelle ! Merci de la confirmer</v-card-text>
+                    <v-card-actions class="pt-0">
+                      <v-btn @click="removeBike(bike.pk)" color="primary">Confirmer</v-btn>
+                      <v-btn @click="confirmDialog = false">Annuler</v-btn>
+                    </v-card-actions>
+                  </v-card>
+                  </v-dialog>
+                  <v-btn
+                  class="ml-2"
+                  @click="toggleModify">Modifier les informations</v-btn>
+                </v-card-actions>
+
+                <template v-if="bike.alerts.length > 0">
+                  <v-card-title>Votre vélo a été vu !</v-card-title>
+                  <v-card-text>
+                    <v-expansion-panels>
+                      <v-expansion-panel v-for="alert in bike.alerts" :key="alert.date" @click="debugLeaflet">
+                        <v-expansion-panel-header>Vu le {{ alert.date }}</v-expansion-panel-header>
+                        <v-expansion-panel-content>
+                          <strong>Message de l'utilisateur :</strong> {{ alert.message }}
+                          <v-img> <!-- TODO: Leaflet loading only one tile on mount -->
+                            <div id="map-wrap" style="height: 40vh">
+                              <l-map :zoom=15 :center="[alert.coords.lat, alert.coords.lon]">
+                                <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
+                                <l-marker :lat-lng="[alert.coords.lat, alert.coords.lon]">
+                                  <l-tooltip>Votre vélo a été vu ici !</l-tooltip>
+                                </l-marker>
+                              </l-map>
+                            </div>
+                          </v-img>
+                        </v-expansion-panel-content>
+                      </v-expansion-panel>
+                    </v-expansion-panels>
+                  </v-card-text>
+                </template>
+                <template v-else>
+                  <v-card-title>Votre vélo n'a été repéré par personne...pour le moment !</v-card-title>
+                </template>
+              </v-card>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+        <template v-if="noBike">
+          <v-card>
+            <v-card-title>Vous n'avez pas déclaré de vol de vélo !</v-card-title>
+            <v-card-subtitle>Quelle chance !</v-card-subtitle>
             <v-card-actions>
               <v-btn
-                color="primary"
-                @click="updateBike(bike)"
-                :loading="isLoading"
-                :disabled="isLoading"
-              >Enregistrer les modifications</v-btn>
-              <v-btn
-                color="red"
-                @click="toggleModify"
-              >
-                Annuler les modifications
+              color="primary"
+              @click="$store.commit('openBikePannel')">
+                Je souhaite déclarer un vol
               </v-btn>
             </v-card-actions>
-            </v-card>
-
-            <v-card
-              elevation="0"
-              v-else
-            >
-              <v-card-title>Référence : {{ bike.reference }}</v-card-title>
-              <v-card-subtitle><v-chip v-for="trait in bike.traits" :key="trait">{{ trait }}</v-chip></v-card-subtitle>
-              <v-img :src="bike.picture" max-width="450"></v-img>
-
-              <v-card-actions>
-                <v-dialog
-                hide-overlay
-                max-width="250"
-                v-model="confirmDialog">
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    v-on="on"
-                    color="primary"
-                  >
-                    J'ai retrouvé mon vélo !
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-card-text class="py-2">Quelle bonne nouvelle ! Merci de la confirmer</v-card-text>
-                  <v-card-actions class="pt-0">
-                    <v-btn @click="removeBike(bike.pk)" color="primary">Confirmer</v-btn>
-                    <v-btn @click="confirmDialog = false">Annuler</v-btn>
-                  </v-card-actions>
-                </v-card>
-                </v-dialog>
-                <v-btn
-                class="ml-2"
-                @click="toggleModify">Modifier les informations</v-btn>
-              </v-card-actions>
-
-              <template v-if="bike.alerts.length > 0">
-                <v-card-title>Votre vélo a été vu !</v-card-title>
-                <v-card-text>
-                  <v-expansion-panels>
-                    <v-expansion-panel v-for="alert in bike.alerts" :key="alert.date" @click="debugLeaflet">
-                      <v-expansion-panel-header>Vu le {{ alert.date }}</v-expansion-panel-header>
-                      <v-expansion-panel-content>
-                        <strong>Message de l'utilisateur :</strong> {{ alert.message }}
-                        <v-img> <!-- TODO: Leaflet loading only one tile on mount -->
-                          <div id="map-wrap" style="height: 40vh">
-                            <l-map :zoom=15 :center="[alert.coords.lat, alert.coords.lon]">
-                              <l-tile-layer url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"></l-tile-layer>
-                              <l-marker :lat-lng="[alert.coords.lat, alert.coords.lon]">
-                                <l-tooltip>Votre vélo a été vu ici !</l-tooltip>
-                              </l-marker>
-                            </l-map>
-                          </div>
-                        </v-img>
-                      </v-expansion-panel-content>
-                    </v-expansion-panel>
-                  </v-expansion-panels>
-                </v-card-text>
-              </template>
-              <template v-else>
-                <v-card-title>Votre vélo n'a été repéré par personne...pour le moment !</v-card-title>
-              </template>
-            </v-card>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-      <template v-if="noBike">
-        <v-card>
-          <v-card-title>Vous n'avez pas déclaré de vol de vélo !</v-card-title>
-          <v-card-subtitle>Quelle chance !</v-card-subtitle>
-          <v-card-actions>
-            <v-btn
-            color="primary"
-            @click="$store.commit('openBikePannel')">
-              Je souhaite déclarer un vol
-            </v-btn>
-          </v-card-actions>
-          <new-bike @creationEnded="$fetch"></new-bike>
-        </v-card>
+            <new-bike @creationEnded="$fetch"></new-bike>
+          </v-card>
+        </template>
       </template>
-    </template>
-    <template v-else>
-      <h1>Vous devez vous identifier pour accèder à vos vélos !</h1>
-      <v-btn @click="openAuthPannel">S'identifier</v-btn>
-    </template>
+      <template v-else>
+        <h1>Vous devez vous identifier pour accèder à vos vélos !</h1>
+        <v-btn @click="openAuthPannel">S'identifier</v-btn>
+      </template>
+    </v-row>
+
+    <v-row>
+        <v-col>
+          <iframe
+            id="haWidget" allowtransparency="true"
+            src="https://www.helloasso.com/associations/wanted-velo/adhesions/adhesion-wanted-velo/widget-bouton" style="width:100%;height:70px;border:none;">
+          </iframe>
+          <div style="width:100%;text-align:center;">
+            Propulsé par <a href="https://www.helloasso.com" rel="nofollow">HelloAsso</a>
+          </div>
+        </v-col>
+    </v-row>
   </v-container>
 </template>
 
