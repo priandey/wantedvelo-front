@@ -68,8 +68,12 @@
             <v-list-item-title>Connexion</v-list-item-title>
           </v-list-item>
           <v-list-item
-            @click="$store.commit('firstVisit')">
+            to="manifeste">
             <v-list-item-title>A propos</v-list-item-title>
+          </v-list-item>
+          <v-list-item
+            to="cgu">
+            <v-list-item-title>CGU</v-list-item-title>
           </v-list-item>
           <v-list-item
             href="http://wantedbugs.priandey.eu/"

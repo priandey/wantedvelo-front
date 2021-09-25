@@ -63,10 +63,16 @@
               v-model="credentials.loginToken"
               @keyup.enter="get_token"></v-text-field>
 
+            <p><v-checkbox
+              v-model="checkbox"
+              style="display: inline-flex"
+            >
+            </v-checkbox> J'ai lu et j'accepte <NuxtLink to="cgu" target="_blank">les conditions générales d'utilisations de WantedVelo (CGU)</NuxtLink></p>
+
             <v-btn
               color="primary"
               :loading="stepper.loading"
-              :disabled="!tokenFilled"
+              :disabled="canProceed"
               @click="get_token"
             >
               Valider
@@ -102,6 +108,7 @@
           step: 1,
           loading:false
         },
+        checkbox: false,
         // API Endpoints below
         send_mail_ep: "pwl/auth/email/",
         send_token_ep: "pwl/auth/token/",
@@ -120,8 +127,8 @@
       mailFilled() {
         return this.user.email.length > 0
       },
-      tokenFilled() {
-        return this.credentials.loginToken.length === 6
+      canProceed() {
+        return !(this.credentials.loginToken.length === 6 && this.checkbox)
       }
     },
 
