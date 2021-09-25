@@ -17,8 +17,7 @@
         </v-card-text>
         <v-card-text>
           Si vous êtes un usager insitutionnel (Association impliqué dans les mobilités douces, collectivité territoriale, etc) et que
-          vous souhaiteriez avoir un accès aux données concernant votre territoire d'intervention, <a href="mailto:riandeypierre@gmail.com">merci de prendre contact par mail avec
-          nous pour que nous mettions votre compte à niveau.</a>
+          vous souhaiteriez avoir un accès aux données concernant votre territoire d'intervention, <a href="mailto:contact@wantedvelo.eu">merci de prendre contact par mail.</a>
         </v-card-text>
         <v-card-actions>
           <v-btn @click="setRead">Fermer</v-btn>
