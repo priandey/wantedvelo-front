@@ -33,6 +33,9 @@
       <social-share
       :page-url="constructedURL"
       @copiedToClipboard="openSnackBar"></social-share></v-card-subtitle>
+      <v-card-text v-if="bike.circumstances">
+        {{ bike.circumstances }}
+      </v-card-text>
       <template v-if="!inModal">
         <v-img>
       <div id="map-wrap" style="height: 30vh">
@@ -160,7 +163,10 @@
         },
 
         latLng() {
-          return [this.bike.robbed_location.latitude, this.bike.robbed_location.longitude]
+          return [
+            this.bike.robbed_location.latitude,
+            this.bike.robbed_location.longitude
+          ]
         },
 
         dialogWidth() {
