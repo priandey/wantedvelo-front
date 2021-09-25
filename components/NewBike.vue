@@ -35,7 +35,7 @@
           button-now-translation="Maintenant"></vue-ctk-date-time-picker>
 
         <v-card-subtitle>Où votre vélo a-t-il disparu : </v-card-subtitle>
-        <v-card_text>
+        <v-card-text>
           <locate-user
             auto-locate
             hide
@@ -49,7 +49,7 @@
             </template>
             <SelectLocation @confirm="setPoint([$event.lat, $event.lng])"></SelectLocation>
           </v-dialog>
-        </v-card_text>
+        </v-card-text>
 
         <v-card-subtitle v-if="location.isLocated">Une localisation a été enregistrée (vous pouvez en changer)</v-card-subtitle>
 
@@ -71,6 +71,17 @@
       </v-container>
       <v-container v-if="!isLoading && isSent">
         <v-card-title><v-icon color="primary">mdi-check</v-icon> Votre vélo a bien été enregistré comme volé</v-card-title>
+        <v-row>
+          <v-col>
+            <iframe
+              id="haWidget" allowtransparency="true"
+              src="https://www.helloasso.com/associations/wanted-velo/adhesions/adhesion-wanted-velo/widget-bouton" style="width:100%;height:70px;border:none;">
+            </iframe>
+            <div style="width:100%;text-align:center;">
+              Propulsé par <a href="https://www.helloasso.com" rel="nofollow">HelloAsso</a>
+            </div>
+          </v-col>
+        </v-row>
       </v-container>
           <v-container v-else-if="error.errored">
             <v-card-title><v-icon color="red">mdi-cancel</v-icon> Une erreur est survenue lors de l'enregistrement de votre vélo</v-card-title>
