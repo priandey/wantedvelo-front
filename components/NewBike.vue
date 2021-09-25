@@ -35,12 +35,13 @@
           button-now-translation="Maintenant"></vue-ctk-date-time-picker>
 
         <v-card-subtitle>Où votre vélo a-t-il disparu : </v-card-subtitle>
+        <v-card_text>
           <locate-user
             auto-locate
             hide
             v-if="location.autoLocate"
             @userLocated="setPoint([$store.state.localisation.point.lat, $store.state.localisation.point.lon])"></locate-user>
-          <v-btn text outlined rounded @click="location.autoLocate = true">Localiser ici</v-btn>/
+          <v-btn text outlined rounded @click="location.autoLocate = true">Localiser à ma position actuelle</v-btn>
           <v-dialog
           v-model="location.dialog">
             <template v-slot:activator="{ on, attrs }">
@@ -48,7 +49,19 @@
             </template>
             <SelectLocation @confirm="setPoint([$event.lat, $event.lng])"></SelectLocation>
           </v-dialog>
+        </v-card_text>
+
         <v-card-subtitle v-if="location.isLocated">Une localisation a été enregistrée (vous pouvez en changer)</v-card-subtitle>
+
+        <v-card-text>
+          <v-textarea
+            outlined
+            name="input-7-4"
+            v-model="bike.circumstances"
+            label="Donnez-nous les circonstances de sa disparition"
+            placeholder="Il était attaché avec un antivol chaîne, et a disparu dans la nuit"
+          ></v-textarea>
+        </v-card-text>
 
       <v-card-actions>
       <v-btn
@@ -106,6 +119,7 @@
               file: null,
               robbed:true,
               date_of_robbery: new Date().toISOString(),
+              circumstances: null,
             },
             bikeCreated: false,
             error: {
@@ -144,6 +158,7 @@
               form_data.append('robbed', this.bike.robbed);
               form_data.append('reference', this.bike.reference);
               form_data.append('date_of_robbery', this.bike.date_of_robbery);
+              form_data.append('circumstances', this.bike.circumstances);
               if (this.bike.file) {
                 form_data.append('picture', this.bike.file, this.bike.file.name);
               }
