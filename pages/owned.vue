@@ -128,10 +128,7 @@
 
     <v-row>
         <v-col>
-          <iframe
-            id="haWidget" allowtransparency="true"
-            src="https://www.helloasso.com/associations/wanted-velo/adhesions/adhesion-wanted-velo/widget-bouton" style="width:100%;height:70px;border:none;">
-          </iframe>
+          <iframe id="haWidget" allowtransparency="true" src="https://www.helloasso.com/associations/wanted-velo/formulaires/1/widget-bouton" style="width:100%;height:70px;border:none;"></iframe>
           <div style="width:100%;text-align:center;">
             Propulsé par <a href="https://www.helloasso.com" rel="nofollow">HelloAsso</a>
           </div>
